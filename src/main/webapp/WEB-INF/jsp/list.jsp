@@ -13,11 +13,14 @@
         <i>There are no lecture in the system.</i>
     </c:when>
     <c:otherwise>
-        <c:forEach items="${lectureDatabase}" var="entry">
-            Lecture ${entry.key}:
-            <a href="<c:url value="/lecture/view/${entry.key}" />">
-                <c:out value="${entry.value.subject}"/></a>
-            (customer: <c:out value="${entry.value.customerName}"/>)<br />
+        <c:forEach items="${lectureDatabase}" var="lecture">
+            <div class="lecture-item">
+                <strong>Lecture ${lecture.id}:</strong>
+                <a href="<c:url value='/lecture/view/${lecture.id}' />">
+                    <c:out value="${lecture.title}"/>
+                </a>
+                <p><c:out value="${lecture.summary}"/></p>
+            </div>
         </c:forEach>
     </c:otherwise>
 </c:choose>
