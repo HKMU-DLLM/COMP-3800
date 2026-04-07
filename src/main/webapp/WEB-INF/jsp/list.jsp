@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<!--<h2>List of lecture</h2><a href="<c:url value="/ticket/create" />">Create a Ticket</a><br/><br/>--!>
+<h2>List of lecture</h2><a href="<c:url value="/lecture/create" />">Create a Lecture</a><br/><br/>
 
 <c:choose>
     <c:when test="${fn:length(lectureDatabase) == 0}">
