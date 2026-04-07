@@ -25,7 +25,7 @@ public class Lecture {
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseMaterial> materials = new ArrayList<>();
 
-    public Lecture() {}
+
 
     public Long getId() {
         return id;

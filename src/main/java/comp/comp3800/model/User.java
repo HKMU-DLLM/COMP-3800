@@ -15,8 +15,8 @@ public class User {
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(name = "password_hash", nullable = false, length = 255)
-    private String passwordHash;
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
 
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
@@ -54,11 +54,11 @@ public class User {
     }
 
     public String getPasswordHash() {
-        return passwordHash;
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPasswordHash(String password) {
+        this.password = password;
     }
 
     public String getFullName() {
