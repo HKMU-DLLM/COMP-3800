@@ -4,9 +4,9 @@
 
 INSERT INTO users (id, username, password, full_name, email, phone, role, enabled)
 VALUES
-    (1, 'teacher1', '$2a$10$3w6Yb9dJ9h1zVqf9gX1p0e0lWQ3mWJzXf5e6vYzQw6m3kq2w7p2oK', 'Teacher One', 'teacher1@example.com', '111-111-1111', 'TEACHER', TRUE),
-    (2, 'student1', '$2a$10$4a8hBfVn2g7p0mXq9zK1mGdQ2xYz3aBc4dEf5gHi6jK7lMn8oP9Qr', 'Student One', 'student1@example.com', '222-222-2222', 'STUDENT', TRUE),
-    (3, 'student2', '$2a$10$5b9iCfVn2g7p0mXq9zK1mGdQ2xYz3aBc4dEf5gHi6jK7lMn8oP9Qs', 'Student Two', 'student2@example.com', '333-333-3333', 'STUDENT', TRUE);
+    (1, 'teacher1', '1234', 'Teacher One', 'teacher1@example.com', '111-111-1111', 'TEACHER', TRUE),
+    (2, 'student1', 'aaaa', 'Student One', 'student1@example.com', '222-222-2222', 'STUDENT', TRUE),
+    (3, 'student2', 'ssss', 'Student Two', 'student2@example.com', '333-333-3333', 'STUDENT', TRUE);
 
 -- LECTURES
 -- Remove the 'id' column from the INSERT and the VALUES
