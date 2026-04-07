@@ -1,7 +1,7 @@
 package comp.comp3800.controller;
 
 import comp.comp3800.model.Lecture;
-import comp.comp3800.repositories.LectureRepository;
+import comp.comp3800.dao.LectureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 @Controller

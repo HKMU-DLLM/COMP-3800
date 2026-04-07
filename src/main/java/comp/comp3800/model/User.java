@@ -15,10 +15,10 @@ public class User {
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(name = "password", nullable = false, length = 255)
-    private String password;
+    @Column(nullable = false)
+    private String password;     // stored password hash (or plain for dev)
 
-    @Column(name = "full_name", nullable = false, length = 100)
+    @Column(nullable = false)
     private String fullName;
 
     @Column(nullable = false, unique = true, length = 120)
@@ -29,76 +29,44 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Role role;
+    private Role role;           // STUDENT or TEACHER
 
     @Column(nullable = false)
     private boolean enabled = true;
 
-    // Constructors
     public User() {}
 
-    public Long getId() {
-        return id;
-    }
+    // getters & setters
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
 
-    public String getUsername() {
-        return username;
-    }
+    public void setId(Long id) { this.id = id; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getUsername() { return username; }
 
-    public String getPasswordHash() {
-        return password;
-    }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setPasswordHash(String password) {
-        this.password = password;
-    }
+    public String getPassword() { return password; }
 
-    public String getFullName() {
-        return fullName;
-    }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    public String getFullName() { return fullName; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    public String getEmail() { return email; }
 
-    public String getEmail() {
-        return email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getPhone() { return phone; }
 
-    public Role getRole() {
-        return role;
-    }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    public Role getRole() { return role; }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+    public void setRole(Role role) { this.role = role; }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+    public boolean isEnabled() { return enabled; }
 
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
 }
