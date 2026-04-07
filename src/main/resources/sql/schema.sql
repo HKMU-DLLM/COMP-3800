@@ -20,7 +20,8 @@ create table if not exists course_materials (
     foreign key (lecture_id) references lectures
     );
 
-
+DROP TABLE IF EXISTS user_roles cascade;
+DROP TABLE IF EXISTS users cascade    ;
 
 
 CREATE TABLE IF NOT EXISTS users (
