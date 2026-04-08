@@ -12,11 +12,11 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public List<Comment> getCommentsForLect(Long lectId) {
-        return commentRepository.findByTargetIdAndTargetType(lectId, Comment.TargetType.LECTURE);
+    public List<Comment> getCommentsForLect() {
+        return commentRepository.findByTargetType( Comment.TargetType.LECTURE);
     }
 
-    public List<Comment> getCommentsForPoll(Long pollId) {
-        return commentRepository.findByTargetIdAndTargetType(pollId, Comment.TargetType.POLL);
+    public List<Comment> getCommentsForPoll() {
+        return commentRepository.findByTargetType(Comment.TargetType.POLL);
     }
 }

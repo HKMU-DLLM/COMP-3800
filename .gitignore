@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Ignore H2 Database files
+Data/*.db
+Data/*.lock.db
+Data/*.trace.db

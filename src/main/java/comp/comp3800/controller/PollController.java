@@ -39,7 +39,7 @@ public class PollController {
         Poll poll = pollRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         List<PollOption> options = poll.getOptions();
-        List<Comment> pollComments = commentSer.getCommentsForPoll(id);
+        List<Comment> pollComments = commentSer.getCommentsForPoll();
 
         model.addAttribute("pollDatabase", poll);
         model.addAttribute("commentDatabase", pollComments);
