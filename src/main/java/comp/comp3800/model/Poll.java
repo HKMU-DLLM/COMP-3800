@@ -28,7 +28,44 @@ public class Poll {
 
     public Poll() {}
 
-    // Getters/Setters
-    // ...
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public Integer getCourseOrder() {
+        return courseOrder;
+    }
+
+    public void setCourseOrder(Integer courseOrder) {
+        this.courseOrder = courseOrder;
+    }
+
+    public List<PollOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<PollOption> options) {
+        this.options = options;
+    }
 }
 

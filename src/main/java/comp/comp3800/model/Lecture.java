@@ -22,8 +22,8 @@ public class Lecture {
     @Column(name = "course_order")
     private Integer courseOrder;
 
-    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CourseMaterial> materials = new ArrayList<>();
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<CourseMaterial> materials;
 
 
 

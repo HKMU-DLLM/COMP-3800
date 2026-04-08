@@ -21,7 +21,7 @@
         <c:forEach items="${lectureDatabase}" var="lecture">
             <div class="lecture-item">
                 <strong>Lecture ${lecture.id}:</strong>
-                <a href="<c:url value='/lecture/view/${lecture.id}' />">
+                <a href="<c:url value='/lecture/coursematerial/${lecture.id}' />">
                     <c:out value="${lecture.title}"/>
                 </a>
                 <p><c:out value="${lecture.summary}"/></p>
@@ -29,5 +29,23 @@
         </c:forEach>
     </c:otherwise>
 </c:choose>
+
+<h2>List of Poll</h2>
+<c:choose>
+    <c:when test="${fn:length(pollDatabase) == 0}">
+        <i>There are no poll in the system.</i>
+    </c:when>
+    <c:otherwise>
+        <c:forEach items="${pollDatabase}" var="poll">
+            <div class="poll-item">
+                <strong>Poll ${poll.id}:</strong>
+                <a href="<c:url value='/poll/view/${poll.id}' />">
+                    <c:out value="${poll.question}"/>
+                </a>
+            </div>
+        </c:forEach>
+    </c:otherwise>
+</c:choose>
+
 </body>
 </html>
