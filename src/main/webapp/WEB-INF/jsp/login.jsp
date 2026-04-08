@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Support Login</title>
+    <title>Login to see more</title>
 </head>
 <body>
 <c:if test="${param.error != null}">
@@ -21,5 +21,6 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input type="submit" value="Log In"/>
 </form>
+<button onclick="history.back()">Back</button>
 </body>
 </html>

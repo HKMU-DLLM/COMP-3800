@@ -10,11 +10,11 @@ VALUES
 
 -- LECTURES
 -- Remove the 'id' column from the INSERT and the VALUES
-INSERT INTO lectures (id, title, summary, course_order)
+INSERT INTO lectures (title, summary, course_order)
 VALUES
-    (1,'Lecture 1: Introduction to the Course', 'Summary here...', 1),
-    (2,'Lecture 2: Core Concepts', 'Summary here...', 2),
-    (3,'Lecture 3: Practice and Review', 'Summary here...', 3);
+    ('Lecture 1: Introduction to the Course', 'Summary here...', 1),
+    ('Lecture 2: Core Concepts', 'Summary here...', 2),
+    ('Lecture 3: Practice and Review', 'Summary here...', 3);
 
 -- MATERIALS (uploaded file metadata; stored_file_path is where your app will find the file)
 INSERT INTO course_materials (id, lecture_id, original_file_name, stored_file_path, content_type, file_size, uploaded_at)

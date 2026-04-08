@@ -18,6 +18,12 @@ public class CourseMaterial {
     @Column(name = "original_file_name", nullable = false, length = 255)
     private String originalFileName;
 
+
+    @Column(name = "content")
+    @Basic(fetch = FetchType.LAZY)
+    @Lob
+    private byte[] contents;
+
     @Column(name = "stored_file_path", nullable = false, length = 500)
     private String storedFilePath;
 
@@ -38,6 +44,14 @@ public class CourseMaterial {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public byte[] getContents() {
+        return contents;
+    }
+
+    public void setContents(byte[] contents) {
+        this.contents = contents;
     }
 
     public Lecture getLecture() {
