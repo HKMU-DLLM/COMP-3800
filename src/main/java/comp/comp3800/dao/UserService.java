@@ -14,9 +14,8 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Explicitly tell the compiler this is a comp.comp3800.model.User
         comp.comp3800.model.User user = userRepository.findByUsername(username)
-                .map(u -> (comp.comp3800.model.User) u) // Force the type check
+                .map(u -> (comp.comp3800.model.User) u)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         return org.springframework.security.core.userdetails.User

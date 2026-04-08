@@ -22,9 +22,8 @@ public class Poll {
     @Column(name = "course_order")
     private Integer courseOrder;
 
-    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("optionIndex ASC")
-    private List<PollOption> options = new ArrayList<>();
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<PollOption> options;
 
     public Poll() {}
 

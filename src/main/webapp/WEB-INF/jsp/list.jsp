@@ -39,7 +39,7 @@
         <c:forEach items="${pollDatabase}" var="poll">
             <div class="poll-item">
                 <strong>Poll ${poll.id}:</strong>
-                <a href="<c:url value='/poll/view/${poll.id}' />">
+                <a href="<c:url value='/poll/${poll.id}' />">
                     <c:out value="${poll.question}"/>
                 </a>
             </div>

@@ -1,31 +1,32 @@
 package comp.comp3800.controller;
 
-import comp.comp3800.dao.*;
+import comp.comp3800.dao.CommentRepository;
+import comp.comp3800.dao.PollRepository;
+import comp.comp3800.dao.UserRepository;
+import comp.comp3800.dao.CommentService;
 import comp.comp3800.model.Comment;
-import comp.comp3800.model.Lecture;
 import comp.comp3800.model.Poll;
+import comp.comp3800.model.PollOption;
 import comp.comp3800.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
 
-
 @Controller
-@RequestMapping("/lecture")
-public class LectureController {
-
-    @Autowired
-    private LectureRepository lectureRepo;
+@RequestMapping("/poll")
+public class PollController {
 
     @Autowired
     private PollRepository pollRepo;
+
+    @Autowired
+    private CommentService commentSer;
 
     @Autowired
     private UserRepository userRepo;
@@ -33,32 +34,26 @@ public class LectureController {
     @Autowired
     private CommentRepository commentRepo;
 
-    @Autowired
-    private CommentService commentSer;
-
-@GetMapping(value = {"", "/list"})
-public String list(ModelMap model) {
-    List<Lecture> lectures = lectureRepo.findAll();
-    List<Poll> polls = pollRepo.findAll();
-
-    model.addAttribute("lectureDatabase", lectures);
-    model.addAttribute("pollDatabase", polls);
-    return "list";
-}
-
-    @GetMapping("/coursematerial/{id}")
-    public String viewMaterial(@PathVariable Long id, Model model) {
-        Lecture lecture = lectureRepo.findById(id)
+    @GetMapping("/{id}")
+    public String viewPoll(@PathVariable Long id, Model model) {
+        Poll poll = pollRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        List<Comment> lectComments = commentSer.getCommentsForLect(id);
+        List<PollOption> options = poll.getOptions();
+        List<Comment> pollComments = commentSer.getCommentsForPoll(id);
 
-        model.addAttribute("lecture", lecture);
-        model.addAttribute("commentDatabase", lectComments);
+        model.addAttribute("pollDatabase", poll);
+        model.addAttribute("commentDatabase", pollComments);
+        model.addAttribute("optsDatabase", options);
 
-        return "coursematerial";
+        return "poll";
     }
 
-    @PostMapping("/coursematerial/comment/add")
+    @PostMapping("/vote")
+    public String submitVote(@RequestParam Long pollId, @RequestParam Long optionId) {
+        return "redirect:/lecture/list?voted=true";
+    }
+
+    @PostMapping("/poll/comment/add")
     public String saveComment(@RequestParam String content, @RequestParam Long pollId, Principal principal) {
         Comment comment = new Comment();
         comment.setContent(content);
@@ -71,9 +66,6 @@ public String list(ModelMap model) {
 
         commentRepo.save(comment);
 
-        return "redirect:/coursematerial/{id}";
+        return "redirect:/poll/{id}";
     }
-
 }
-
-

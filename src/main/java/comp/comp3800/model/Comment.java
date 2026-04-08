@@ -19,7 +19,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
@@ -85,6 +85,14 @@ public class Comment {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getPrettyTime() {
+        if (this.createdAt == null) return "";
+        java.time.format.DateTimeFormatter formatter =
+                java.time.format.DateTimeFormatter.ofPattern("dd MM yyyy HH:mm")
+                        .withZone(java.time.ZoneId.systemDefault());
+        return formatter.format(this.createdAt);
     }
 }
 
