@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,38 +58,43 @@ public class lectureService {
     @Transactional
     public long createLecture(String title, String summary,
                               List<MultipartFile> attachments) throws IOException {
+
         Lecture lecture = new Lecture();
         lecture.setTitle(title);
         lecture.setSummary(summary);
 
+        // Folder where you store files
+        Path uploadRoot = Paths.get("src/uploads");
+        Files.createDirectories(uploadRoot);
+
         if (attachments != null) {
             for (MultipartFile filePart : attachments) {
                 if (filePart == null || filePart.isEmpty()) {
-                    continue; // skip empty inputs
+                    continue;
                 }
 
-                CourseMaterial coursematerial = new CourseMaterial();
-                coursematerial.setOriginalFileName(filePart.getOriginalFilename());
-                coursematerial.setContentType(filePart.getContentType());
-                coursematerial.setContents(filePart.getBytes());
-                coursematerial.setLecture(lecture);
+                // 1) Save file to disk
+                String storedName = UUID.randomUUID() + "_" + filePart.getOriginalFilename();
+                Path target = uploadRoot.resolve(storedName);
+                Files.copy(filePart.getInputStream(), target);
 
-                // NEW: ensure storedFilePath is non-null
-                // If you don't actually store on disk, at least store a logical name:
-                String generatedName = UUID.randomUUID() + "_" + filePart.getOriginalFilename();
-                coursematerial.setStoredFilePath(generatedName);
+                // 2) Create CourseMaterial
+                CourseMaterial m = new CourseMaterial();
+                m.setLecture(lecture);
+                m.setOriginalFileName(filePart.getOriginalFilename());
+                m.setContentType(filePart.getContentType());
+                m.setFileSize(filePart.getSize());
+                m.setStoredFilePath(target.toString());
 
-                if (coursematerial.getOriginalFileName() != null
-                        && !coursematerial.getOriginalFileName().isEmpty()
-                        && coursematerial.getContents() != null
-                        && coursematerial.getContents().length > 0) {
-                    lecture.getMaterials().add(coursematerial);
-                }
+                // IMPORTANT: do NOT use setContents anymore for now
+                // m.setContents(null);
+
+                lecture.getMaterials().add(m);
             }
         }
 
-        Lecture savedlecture = lecRepo.save(lecture);
-        return savedlecture.getId();
+        Lecture saved = lecRepo.save(lecture);
+        return saved.getId();
     }
 
 }

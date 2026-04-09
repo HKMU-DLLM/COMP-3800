@@ -17,11 +17,11 @@ VALUES
     ('Practice and Review', 'Summary here...');
 
 -- MATERIALS (uploaded file metadata; stored_file_path is where your app will find the file)
-INSERT INTO course_materials (lecture_id,original_file_name, stored_file_path, content_type, file_size, uploaded_at)
+INSERT INTO course_materials (lecture_id,original_file_name, stored_file_path, content_type, file_size, uploaded_at,content)
 VALUES
-    ( 1,'Lecture1-Notes.pdf', '/var/app/uploads/Lecture1-Notes.pdf', 'application/pdf', 123456, CURRENT_TIMESTAMP),
-    (  1,'Lecture1-Slides.pptx', '/var/app/uploads/Lecture1-Slides.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 234567, CURRENT_TIMESTAMP),
-    ( 2,'Lecture2-Notes.pdf', '/var/app/uploads/Lecture2-Notes.pdf', 'application/pdf', 345678, CURRENT_TIMESTAMP);
+    ( 1,'Lecture1-Notes.pdf', 'src/uploads/Lecture1-Notes.pdf', 'application/pdf', 1423, CURRENT_TIMESTAMP,1223),
+    (  1,'Lecture1-Slides.pptx', 'src/uploads/Lecture1-Slides.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 2233, CURRENT_TIMESTAMP,2324),
+    ( 2,'Lecture2-Notes.pdf', 'src/uploads/Lecture2-Notes.pdf', 'application/pdf', 3445, CURRENT_TIMESTAMP,1223);
 -- POLLS
 INSERT INTO polls (id, question, created_at, course_order)
 VALUES

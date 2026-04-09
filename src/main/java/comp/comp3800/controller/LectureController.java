@@ -17,6 +17,9 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 
@@ -60,7 +63,7 @@ public String list(ModelMap model) {
     return "list";
 }
 
-    @GetMapping("coursematerial/{id}")
+    @GetMapping("/coursematerial/{id}")
     public String viewMaterial(@PathVariable Long id, Model model) {
         Lecture lecture = lectureRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -149,23 +152,30 @@ public String list(ModelMap model) {
     public View download(@PathVariable("lectureId") long lectureId,
                          @PathVariable("materialId") long materialId) {
 
-        // Load the material by id
         CourseMaterial material = courseMaterialRepo.findById(materialId).orElse(null);
-        if (material != null && material.getLecture() != null
+
+        if (material != null
+                && material.getLecture() != null
                 && material.getLecture().getId() != null
                 && material.getLecture().getId() == lectureId) {
 
-            // Use your existing DownloadingView
-            return new DownloadingView(
-                    material.getOriginalFileName(),
-                    material.getContentType(),
-                    material.getContents()
-            );
+            try {
+                Path path = Paths.get(material.getStoredFilePath());
+                byte[] data = Files.readAllBytes(path);
+
+                return new DownloadingView(
+                        material.getOriginalFileName(),
+                        material.getContentType(),
+                        data
+                );
+            } catch (IOException e) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found on server");
+            }
         }
 
-
-        return new RedirectView("/lecture/list",true);
+        return new RedirectView("/lecture/list", true);
     }
+
 
 
 }
