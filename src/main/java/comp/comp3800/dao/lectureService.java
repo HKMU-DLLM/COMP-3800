@@ -53,13 +53,13 @@ public class lectureService {
 
     @Transactional
     public long createLecture(String title, String summary,
-                             int order,
+                             //int order,
                               List<MultipartFile> attachments)
             throws IOException {
         Lecture lecture = new Lecture();
         lecture.setTitle(title);
         lecture.setSummary(summary);
-        lecture.setOrder(order);
+        //lecture.setOrder(order);
         for (MultipartFile filePart : attachments) {
             CourseMaterial coursematerial = new CourseMaterial();
             coursematerial.setOriginalFileName(filePart.getOriginalFilename());

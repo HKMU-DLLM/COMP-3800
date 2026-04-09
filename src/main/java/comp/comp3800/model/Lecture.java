@@ -9,18 +9,20 @@ import java.util.List;
 public class Lecture {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // IMPORTANT
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lecture_id")
     private Long id;
 
     private String title;
 
     private String summary;
 
-    @Column(name = "course_order")
-    private int order;
+    //@Column(name = "course_order")
+    //private int order;
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CourseMaterial> materials;
+    private List<CourseMaterial> materials = new ArrayList<>();
 
 
 
@@ -48,13 +50,13 @@ public class Lecture {
         this.summary = summary;
     }
 
-    public int getOrder() {
-        return order;
-    }
+    //public int getOrder() {
+        //return order;
+    //}
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
+    //public void setOrder(int order) {
+        //this.order = order;
+    //}
 
     public List<CourseMaterial> getMaterials() {
         return materials;

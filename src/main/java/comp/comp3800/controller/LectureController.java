@@ -90,13 +90,13 @@ public String list(ModelMap model) {
             this.summary = summary;
         }
 
-        public int getOrder() {
-            return order;
-        }
+        //public int getOrder() {
+            //return order;
+        //}
 
-        public void setOrder(int order) {
-            this.order = order;
-        }
+        //public void setOrder(int order) {
+            //this.order = order;
+        //}
 
         public List<MultipartFile> getAttachments() {
             return attachments;
@@ -120,7 +120,7 @@ public String list(ModelMap model) {
         lecService.createLecture(
                 form.getTitle(),
                 form.getSummary(),
-                form.getOrder(),
+                //form.getOrder(),
                 form.getAttachments()
         );
         return "redirect:/lecture/list";
