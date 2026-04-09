@@ -12,17 +12,16 @@ VALUES
 -- Remove the 'id' column from the INSERT and the VALUES
 INSERT INTO lectures (title, summary)
 VALUES
-    ('Lecture 1: Introduction to the Course', 'Summary here...'),
-    ('Lecture 2: Core Concepts', 'Summary here...'),
-    ('Lecture 3: Practice and Review', 'Summary here...');
+    ('Introduction to the Course', 'Summary here...'),
+    ('Core Concepts', 'Summary here...'),
+    ('Practice and Review', 'Summary here...');
 
 -- MATERIALS (uploaded file metadata; stored_file_path is where your app will find the file)
-INSERT INTO course_materials (id, lecture_id, original_file_name, stored_file_path, content_type, file_size, uploaded_at)
+INSERT INTO course_materials (lecture_id,original_file_name, stored_file_path, content_type, file_size, uploaded_at)
 VALUES
-    (1, 1, 'Lecture1-Notes.pdf', '/var/app/uploads/Lecture1-Notes.pdf', 'application/pdf', 123456, CURRENT_TIMESTAMP),
-    (2, 1, 'Lecture1-Slides.pptx', '/var/app/uploads/Lecture1-Slides.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 234567, CURRENT_TIMESTAMP),
-    (3, 2, 'Lecture2-Notes.pdf', '/var/app/uploads/Lecture2-Notes.pdf', 'application/pdf', 345678, CURRENT_TIMESTAMP);
-
+    ( 1,'Lecture1-Notes.pdf', '/var/app/uploads/Lecture1-Notes.pdf', 'application/pdf', 123456, CURRENT_TIMESTAMP),
+    (  1,'Lecture1-Slides.pptx', '/var/app/uploads/Lecture1-Slides.pptx', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 234567, CURRENT_TIMESTAMP),
+    ( 2,'Lecture2-Notes.pdf', '/var/app/uploads/Lecture2-Notes.pdf', 'application/pdf', 345678, CURRENT_TIMESTAMP);
 -- POLLS
 INSERT INTO polls (id, question, created_at, course_order)
 VALUES

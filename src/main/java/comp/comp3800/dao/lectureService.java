@@ -27,6 +27,7 @@ public class lectureService {
     public List<CourseMaterial> getTickets() {
         return cRepo.findAll();
     }
+
     @Transactional
     public Lecture getlecture(long id)
             throws LectureNotFound {
@@ -53,25 +54,37 @@ public class lectureService {
 
     @Transactional
     public long createLecture(String title, String summary,
-                             //int order,
-                              List<MultipartFile> attachments)
-            throws IOException {
+                              List<MultipartFile> attachments) throws IOException {
         Lecture lecture = new Lecture();
         lecture.setTitle(title);
         lecture.setSummary(summary);
-        //lecture.setOrder(order);
-        for (MultipartFile filePart : attachments) {
-            CourseMaterial coursematerial = new CourseMaterial();
-            coursematerial.setOriginalFileName(filePart.getOriginalFilename());
-            coursematerial.setContentType(filePart.getContentType());
-            coursematerial.setContents(filePart.getBytes());
-            coursematerial.setLecture(lecture);
-            if (coursematerial.getOriginalFileName() != null && coursematerial.getOriginalFileName().length() > 0
-                    && coursematerial.getContents() != null
-                    && coursematerial.getContents().length > 0) {
-                lecture.getMaterials().add(coursematerial);
+
+        if (attachments != null) {
+            for (MultipartFile filePart : attachments) {
+                if (filePart == null || filePart.isEmpty()) {
+                    continue; // skip empty inputs
+                }
+
+                CourseMaterial coursematerial = new CourseMaterial();
+                coursematerial.setOriginalFileName(filePart.getOriginalFilename());
+                coursematerial.setContentType(filePart.getContentType());
+                coursematerial.setContents(filePart.getBytes());
+                coursematerial.setLecture(lecture);
+
+                // NEW: ensure storedFilePath is non-null
+                // If you don't actually store on disk, at least store a logical name:
+                String generatedName = UUID.randomUUID() + "_" + filePart.getOriginalFilename();
+                coursematerial.setStoredFilePath(generatedName);
+
+                if (coursematerial.getOriginalFileName() != null
+                        && !coursematerial.getOriginalFileName().isEmpty()
+                        && coursematerial.getContents() != null
+                        && coursematerial.getContents().length > 0) {
+                    lecture.getMaterials().add(coursematerial);
+                }
             }
         }
+
         Lecture savedlecture = lecRepo.save(lecture);
         return savedlecture.getId();
     }

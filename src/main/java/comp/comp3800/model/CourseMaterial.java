@@ -6,7 +6,6 @@ import java.time.Instant;
 @Entity
 @Table(name = "course_materials")
 public class CourseMaterial {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,10 +17,8 @@ public class CourseMaterial {
     @Column(name = "original_file_name", nullable = false, length = 255)
     private String originalFileName;
 
-
+    @Lob @Basic(fetch = FetchType.LAZY)
     @Column(name = "content")
-    @Basic(fetch = FetchType.LAZY)
-    @Lob
     private byte[] contents;
 
     @Column(name = "stored_file_path", nullable = false, length = 500)
