@@ -59,7 +59,7 @@ public String list(ModelMap model) {
     return "list";
 }
 
-    @GetMapping("/coursematerial/{id}")
+    @GetMapping("coursematerial/{id}")
     public String viewMaterial(@PathVariable Long id, Model model) {
         Lecture lecture = lectureRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

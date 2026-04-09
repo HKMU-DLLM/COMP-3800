@@ -24,7 +24,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    <h5 class="text-muted text-uppercase small fw-bold">Lecture ${lecture.courseOrder}</h5>
+                    <h5 class="text-muted text-uppercase small fw-bold">Lecture </h5>
                     <h2 class="card-title h4">${lecture.title}</h2>
                     <hr>
                     <p class="card-text text-secondary">${lecture.summary}</p>
