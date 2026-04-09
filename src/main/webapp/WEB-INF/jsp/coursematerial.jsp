@@ -50,7 +50,8 @@
                                                 <small class="text-muted">Available for download</small>
                                             </div>
                                         </div>
-                                        <a href="/download/${file.id}" class="btn btn-outline-primary btn-sm px-4">
+                                        <a href="<c:url value='/lecture/${lecture.id}/attachment/${material.id}' />"
+                                           class="btn btn-outline-primary btn-sm px-4">
                                             Download
                                         </a>
                                     </div>
@@ -73,6 +74,7 @@
         <div class="container mb-5">
             <h3>Comments</h3>
 
+            <div class="card mb-4">
             <div class="card mb-4">
                 <div class="card-body">
                     <form action="<c:url value='/coursematerial/comment/add'/>" method="post">
@@ -110,8 +112,8 @@
                 </c:if>
             </div>
         </div>
-    </div>
-</div>
+    </div></div></div>
+
 
 </body>
 </html>

@@ -1,10 +1,8 @@
 package comp.comp3800.controller;
 
 import comp.comp3800.dao.*;
-import comp.comp3800.model.Comment;
-import comp.comp3800.model.Lecture;
-import comp.comp3800.model.Poll;
-import comp.comp3800.model.User;
+import comp.comp3800.model.*;
+import comp.comp3800.view.DownloadingView;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,6 +43,9 @@ public class LectureController {
 
     @Autowired
     private CommentService commentSer;
+
+    @Autowired
+    private CourseMaterialRepository courseMaterialRepo;
 
 @GetMapping(value = {"", "/list"})
 public String list(ModelMap model) {
@@ -141,6 +142,32 @@ public String list(ModelMap model) {
 
         return "redirect:/coursematerial/{id}";
     }
+
+
+
+    @GetMapping("/{lectureId}/attachment/{materialId}")
+    public View download(@PathVariable("lectureId") long lectureId,
+                         @PathVariable("materialId") long materialId) {
+
+        // Load the material by id
+        CourseMaterial material = courseMaterialRepo.findById(materialId).orElse(null);
+        if (material != null && material.getLecture() != null
+                && material.getLecture().getId() != null
+                && material.getLecture().getId() == lectureId) {
+
+            // Use your existing DownloadingView
+            return new DownloadingView(
+                    material.getOriginalFileName(),
+                    material.getContentType(),
+                    material.getContents()
+            );
+        }
+
+
+        return new RedirectView("/lecture/list",true);
+    }
+
+
 }
 
 
