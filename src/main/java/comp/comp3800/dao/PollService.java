@@ -17,6 +17,9 @@ public class PollService {
     @Autowired
     private PollOptionRepository pollOptionRepository;
 
+    @Autowired
+    private PollVoteRepository pollVoteRepository;
+
     @Transactional
     public Poll createPoll(String question, List<String> optionTexts) {
         if (optionTexts == null || optionTexts.size() != 5) {
@@ -34,12 +37,13 @@ public class PollService {
             option.setOptionIndex(i + 1);
             pollOptionRepository.save(option);
         }
-
         return savedPoll;
     }
 
     @Transactional
     public void deletePoll(Long pollId) {
+        pollVoteRepository.deleteByPollId(pollId);
+        pollOptionRepository.deleteByPollId(pollId);
         pollRepository.deleteById(pollId);
     }
 
@@ -50,22 +54,20 @@ public class PollService {
         }
 
         Poll poll = pollRepository.findById(pollId)
-            .orElseThrow(() -> new RuntimeException("Poll not found"));
+                .orElseThrow(() -> new RuntimeException("Poll not found"));
 
         poll.setQuestion(question);
         pollRepository.save(poll);
 
-        // 更新 5 個 option（根據 optionIndex 1~5）
         for (int i = 0; i < 5; i++) {
             int index = i + 1;
-        // 找出對應的 option（一定存在，因為 add 時已保證 5 個）
             PollOption option = poll.getOptions().stream()
-                .filter(o -> o.getOptionIndex() == index)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Option " + index + " not found"));
+                    .filter(o -> o.getOptionIndex() == index)
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Option " + index + " not found"));
 
             option.setOptionText(optionTexts.get(i).trim());
             pollOptionRepository.save(option);
-            }
         }
+    }
 }

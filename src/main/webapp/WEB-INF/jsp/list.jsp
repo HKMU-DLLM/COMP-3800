@@ -42,6 +42,9 @@
 </c:choose>
 
 <h2>List of Poll</h2>
+<security:authorize access="hasRole('TEACHER')">
+    <a href="<c:url value="/poll/admin/polls/new" />">Create a Poll</a><br/><br/>
+</security:authorize>
 <c:choose>
     <c:when test="${fn:length(pollDatabase) == 0}">
         <i>There are no poll in the system.</i>

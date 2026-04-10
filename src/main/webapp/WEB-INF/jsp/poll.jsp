@@ -19,6 +19,22 @@
             <li class="breadcrumb-item active">${pollDatabase.question}</li>
         </ol>
     </nav>
+<security:authorize access="hasRole('TEACHER')">
+    <div class="mb-3">
+        <a href="<c:url value='/poll/admin/polls/${pollDatabase.id}/edit' />"
+           class="btn btn-warning btn-sm">
+            ✏️ Edit Poll
+        </a>
+        
+        <form action="<c:url value='/poll/admin/polls/${pollDatabase.id}/delete' />"
+                method="post" style="display:inline;">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            <button type="submit" class="btn btn-danger btn-sm"
+                    onclick="return confirm('Delete this poll and all its votes/comments/options?')">
+            🗑️ Delete Poll
+        </a>
+    </div>
+</security:authorize>
 
     <div class="row">
         <div class="col-md-4">
