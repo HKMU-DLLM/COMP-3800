@@ -22,7 +22,7 @@
 
 <br/>
 
-<a href="<c:url value='/userinfo/edit' />">Edit your information</a>
+<a href="<c:url value='/userinfo/edituser' />">Edit your information</a>
 
 </body>
 </html>

@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -118,7 +115,54 @@ public class UserController {
         return "userinfo";  // /WEB-INF/jsp/userinfo.jsp
     }
 
+    // 1) Show edit form
+    @GetMapping("/userinfo/edituser")
+    public String showEditForm(Model model, Principal principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
+        String username = principal.getName();
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        model.addAttribute("user", user);
+        return "edituser";
+    }
 
+    @PostMapping("/userinfo/edituser")
+    public String updateUserInfo(@RequestParam String username,
+                                 @RequestParam(required = false) String password,
+                                 @RequestParam String fullName,
+                                 @RequestParam String email,
+                                 @RequestParam String phone,
+                                 @RequestParam String role,
+                                 Principal principal) {
+
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        String currentUsername = principal.getName();
+        User user = userRepo.findByUsername(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        user.setUsername(username);
+        user.setFullName(fullName);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setRole(User.Role.valueOf(role));
+
+        if (password != null && !password.isBlank()) {
+            user.setPassword(password);
+        }
+
+        userRepo.save(user);
+
+        return "redirect:/userinfo";
+    }
 }
+
+
+
+
