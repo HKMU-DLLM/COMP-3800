@@ -45,6 +45,7 @@ public class PollController {
     @Autowired
     private PollService pollService;
 
+    // ====================== 一般學生/老師看 Poll ======================
     @GetMapping("/{id}")
     public String viewPoll(@PathVariable Long id, Model model, Principal principal) {
         Poll poll = pollRepo.findById(id)
@@ -52,7 +53,6 @@ public class PollController {
 
         List<Comment> comments = commentSer.getCommentsForPoll(id);
 
-        // === G) Poll Voting Flow 的核心 ===
         Map<Long, Long> voteCounts = pollVoteService.getVoteCounts(id);
         String selectedOptionId = null;
 
@@ -106,6 +106,8 @@ public class PollController {
         return "redirect:/poll/" + pollId;
     }
 
+    // ====================== POLL MANAGEMENT (TEACHER ONLY) ======================
+
     @GetMapping("/admin/polls/new")
     public String showCreatePollForm(Model model) {
         model.addAttribute("pollForm", new PollForm());
@@ -128,7 +130,75 @@ public class PollController {
         return "redirect:/lecture/list";
     }
 
+    // ====================== EDIT POLL ======================
+    @GetMapping("/admin/polls/{pollId}/edit")
+    public String showEditPollForm(@PathVariable Long pollId, Model model) {
+        Poll poll = pollRepo.findById(pollId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        PollEditForm form = new PollEditForm();
+        form.setQuestion(poll.getQuestion());
+
+        List<PollOption> options = poll.getOptions();
+
+        // 使用傳統寫法，避免 lambda 編譯錯誤
+        java.util.Collections.sort(options, new java.util.Comparator<PollOption>() {
+            @Override
+            public int compare(PollOption a, PollOption b) {
+                return Integer.compare(a.getOptionIndex(), b.getOptionIndex());
+            }
+        });
+
+        if (options.size() >= 5) {
+            form.setOption1(options.get(0).getOptionText());
+            form.setOption2(options.get(1).getOptionText());
+            form.setOption3(options.get(2).getOptionText());
+            form.setOption4(options.get(3).getOptionText());
+            form.setOption5(options.get(4).getOptionText());
+        }
+
+        model.addAttribute("pollEditForm", form);
+        model.addAttribute("pollId", pollId);
+        return "edit-poll";
+    }
+
+    @PostMapping("/admin/polls/{pollId}/edit")
+    public String updatePoll(@PathVariable Long pollId,
+                             @ModelAttribute("pollEditForm") PollEditForm form) {
+
+        List<String> options = List.of(
+            form.getOption1(), form.getOption2(), form.getOption3(),
+            form.getOption4(), form.getOption5()
+        );
+
+        pollService.updatePoll(pollId, form.getQuestion(), options);
+        return "redirect:/lecture/list";
+    }
+
+    // ====================== FORM CLASSES ======================
     public static class PollForm {
+        private String question;
+        private String option1;
+        private String option2;
+        private String option3;
+        private String option4;
+        private String option5;
+
+        public String getQuestion() { return question; }
+        public void setQuestion(String question) { this.question = question; }
+        public String getOption1() { return option1; }
+        public void setOption1(String option1) { this.option1 = option1; }
+        public String getOption2() { return option2; }
+        public void setOption2(String option2) { this.option2 = option2; }
+        public String getOption3() { return option3; }
+        public void setOption3(String option3) { this.option3 = option3; }
+        public String getOption4() { return option4; }
+        public void setOption4(String option4) { this.option4 = option4; }
+        public String getOption5() { return option5; }
+        public void setOption5(String option5) { this.option5 = option5; }
+    }
+
+    public static class PollEditForm {
         private String question;
         private String option1;
         private String option2;

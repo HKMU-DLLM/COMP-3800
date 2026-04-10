@@ -42,4 +42,30 @@ public class PollService {
     public void deletePoll(Long pollId) {
         pollRepository.deleteById(pollId);
     }
+
+    @Transactional
+    public void updatePoll(Long pollId, String question, List<String> optionTexts) {
+        if (optionTexts == null || optionTexts.size() != 5) {
+            throw new IllegalArgumentException("Poll must have exactly 5 options");
+        }
+
+        Poll poll = pollRepository.findById(pollId)
+            .orElseThrow(() -> new RuntimeException("Poll not found"));
+
+        poll.setQuestion(question);
+        pollRepository.save(poll);
+
+        // 更新 5 個 option（根據 optionIndex 1~5）
+        for (int i = 0; i < 5; i++) {
+            int index = i + 1;
+        // 找出對應的 option（一定存在，因為 add 時已保證 5 個）
+            PollOption option = poll.getOptions().stream()
+                .filter(o -> o.getOptionIndex() == index)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Option " + index + " not found"));
+
+            option.setOptionText(optionTexts.get(i).trim());
+            pollOptionRepository.save(option);
+            }
+        }
 }

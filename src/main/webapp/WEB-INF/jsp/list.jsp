@@ -45,16 +45,24 @@
     </c:when>
     <c:otherwise>
         <c:forEach items="${pollDatabase}" var="poll">
-            <div class="poll-item">
+            <div class="poll-item border p-3 mb-3 rounded shadow-sm">
                 <strong>Poll ${poll.id}:</strong>
-                <a href="<c:url value='/poll/${poll.id}' />">
+                <a href="<c:url value='/poll/${poll.id}' />" class="text-decoration-none">
                     <c:out value="${poll.question}"/>
                 </a>
                 <security:authorize access="hasRole('TEACHER')">
-                    <form action="<c:url value='/poll/admin/polls/${poll.id}/delete' />"
+                    <div class="mt-3">
+                        <a href="<c:url value='/poll/admin/polls/${poll.id}/edit' />"
+                        class="btn btn-warning btn-sm me-2">
+                            Edit
+                        </a>
+                        <form action="<c:url value='/poll/admin/polls/${poll.id}/delete' />"
                             method="post" style="display:inline;">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            <button type="submit" class="btn btn-danger btn-sm"onclick="return confirm('Delete this poll and all its votes/comments/options?')">Delete</button>
+                            <button type="submit"  class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Delete this poll and all its votes/comments/options?')">
+                                    Delete
+                            </button>
                     </form>
                 </security:authorize>
             </div>
