@@ -13,7 +13,10 @@
 
 
 
-<h2>List of lecture</h2><a href="<c:url value="/lecture/create" />">Create a Lecture</a><br/><br/>
+<h2>List of lecture</h2>
+<security:authorize access="hasRole('TEACHER')">
+    <a href="<c:url value="/lecture/create" />" class="btn btn-success">+ Create a Lecture</a><br/><br/>
+</security:authorize>
 
 <c:choose>
     <c:when test="${fn:length(lectureDatabase) == 0}">

@@ -13,10 +13,13 @@
 </head>
 <body class="bg-light">
 
-<a href="<c:url value='/lecture/coursematerial/${lecture.id}/delete' />"
-   class="btn btn-danger btn-sm">
-    Delete lecture
-</a>
+<security:authorize access="hasRole('TEACHER')">
+    <a href="<c:url value='/lecture/coursematerial/${lecture.id}/delete' />"
+       class="btn btn-danger btn-sm"
+       onclick="return confirm('Delete this entire lecture and all its files?')">
+        Delete lecture
+    </a>
+</security:authorize>
 
 <div class="container py-5">
     <nav aria-label="breadcrumb">
@@ -60,10 +63,13 @@
                                            class="btn btn-outline-primary btn-sm px-4">
                                             Download
                                         </a>
-                                        <a href="<c:url value='/lecture/coursematerial/${lecture.id}/attachment/${material.id}/delete' />"
-                                           class="btn btn-outline-danger btn-sm">
-                                            Delete file
-                                        </a>
+                                        <security:authorize access="hasRole('TEACHER')">
+                                            <a href="<c:url value='/lecture/coursematerial/${lecture.id}/attachment/${material.id}/delete' />"
+                                               class="btn btn-outline-danger btn-sm"
+                                               onclick="return confirm('Delete this file?')">
+                                               Delete File
+                                            </a>
+                                        </security:authorize>
                                     </div>
                                 </c:forEach>
                             </c:when>
