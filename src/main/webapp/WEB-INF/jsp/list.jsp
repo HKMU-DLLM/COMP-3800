@@ -15,6 +15,12 @@
     <button type="button">Login</button>
 </a>
 
+<security:authorize access="hasAnyRole('TEACHER','STUDENT')">
+    <a href="<c:url value='/userinfo' />">
+        <security:authentication property="name" />
+    </a>
+</security:authorize>
+
 <security:authorize access="hasRole('TEACHER')">
     <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
 </security:authorize>
