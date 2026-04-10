@@ -126,7 +126,7 @@ public class PollController {
 
     @PostMapping("/admin/polls/{pollId}/delete")
     public String deletePoll(@PathVariable Long pollId) {
-        pollService.forceDeletePoll(pollId);   // ← 改成 forceDeletePoll
+        pollService.deletePoll(pollId);   // ← 改回呼叫 deletePoll
         return "redirect:/lecture/list?deleted=true";
     }
 

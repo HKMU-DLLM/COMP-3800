@@ -2,6 +2,8 @@ package comp.comp3800.model;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -67,5 +69,17 @@ public class PollOption {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+    @OneToMany(mappedBy = "selectedOption", 
+               cascade = CascadeType.REMOVE, 
+               orphanRemoval = true)
+    private List<PollVote> votes = new ArrayList<>();
+
+    public List<PollVote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<PollVote> votes) {
+        this.votes = votes;
     }
 }

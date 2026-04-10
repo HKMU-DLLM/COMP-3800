@@ -10,7 +10,7 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findByTargetType(Comment.TargetType targetType);
-
+    void deleteByTargetTypeAndTargetId(Comment.TargetType targetType, Long targetId);
     List<Comment> findByTargetTypeAndTargetIdOrderByCreatedAtAsc(
             Comment.TargetType targetType, Long targetId);
 }

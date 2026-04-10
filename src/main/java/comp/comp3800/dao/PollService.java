@@ -1,5 +1,5 @@
 package comp.comp3800.dao;
-
+import comp.comp3800.model.Comment;
 import comp.comp3800.model.Poll;
 import comp.comp3800.model.PollOption;
 import jakarta.persistence.EntityManager;
@@ -14,6 +14,9 @@ import java.util.List;
 public class PollService {
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private PollRepository pollRepository;
 
     @Autowired
@@ -25,28 +28,14 @@ public class PollService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    // ====================== 強制刪除 Poll（支援有人投票的情況） ======================
     @Transactional
-    public void forceDeletePoll(Long pollId) {
-        // 1. 刪除所有投票
-        entityManager.createNativeQuery("DELETE FROM poll_votes WHERE poll_id = :pollId")
-                .setParameter("pollId", pollId)
-                .executeUpdate();
-
-        // 2. 刪除所有選項
-        entityManager.createNativeQuery("DELETE FROM poll_options WHERE poll_id = :pollId")
-                .setParameter("pollId", pollId)
-                .executeUpdate();
-
-        entityManager.createNativeQuery(
-                        "DELETE FROM comments WHERE target_type = 'POLL' AND target_id = :pollId")
-                .setParameter("pollId", pollId)
-                .executeUpdate();
+    public void deletePoll(Long pollId) {
+        commentRepository.deleteByTargetTypeAndTargetId(
+                Comment.TargetType.POLL, pollId);
 
         pollRepository.deleteById(pollId);
 
-        System.out.println("✅ Force deleted poll ID: " + pollId
-                + " (votes + options + comments 已全部清除)");
+        System.out.println("Poll ID " + pollId + " deleted successfully.");
     }
 
     @Transactional
