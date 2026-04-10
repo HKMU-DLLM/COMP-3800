@@ -14,11 +14,10 @@
 <body class="bg-light">
 
 <security:authorize access="hasRole('TEACHER')">
-    <a href="<c:url value='/lecture/coursematerial/${lecture.id}/delete' />"
-       class="btn btn-danger btn-sm"
-       onclick="return confirm('Delete this entire lecture and all its files?')">
-        Delete lecture
-    </a>
+<a href="<c:url value='/lecture/coursematerial/${lecture.id}/delete' />"
+   class="btn btn-danger btn-sm">
+    Delete lecture
+</a>
 </security:authorize>
 
 <div class="container py-5">
@@ -64,12 +63,12 @@
                                             Download
                                         </a>
                                         <security:authorize access="hasRole('TEACHER')">
-                                            <a href="<c:url value='/lecture/coursematerial/${lecture.id}/attachment/${material.id}/delete' />"
-                                               class="btn btn-outline-danger btn-sm"
-                                               onclick="return confirm('Delete this file?')">
-                                               Delete File
-                                            </a>
+                                        <a href="<c:url value='/lecture/coursematerial/${lecture.id}/attachment/${material.id}/delete' />"
+                                           class="btn btn-outline-danger btn-sm">
+                                            Delete file
+                                        </a>
                                         </security:authorize>
+
                                     </div>
                                 </c:forEach>
                             </c:when>

@@ -11,12 +11,15 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
+<a href="<c:url value="/login" />">
+    <button type="button">Login</button>
+</a>
 
-
-<h2>List of lecture</h2>
 <security:authorize access="hasRole('TEACHER')">
-    <a href="<c:url value="/lecture/create" />" class="btn btn-success">+ Create a Lecture</a><br/><br/>
+    <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
 </security:authorize>
+
+<h2>List of lecture</h2><a href="<c:url value="/lecture/create" />">Create a Lecture</a><br/><br/>
 
 <c:choose>
     <c:when test="${fn:length(lectureDatabase) == 0}">
@@ -36,35 +39,17 @@
 </c:choose>
 
 <h2>List of Poll</h2>
-<security:authorize access="hasRole('TEACHER')">
-    <a href="<c:url value='/poll/admin/polls/new' />" class="btn btn-success mb-3">+ Add New Poll</a>
-</security:authorize>
 <c:choose>
     <c:when test="${fn:length(pollDatabase) == 0}">
         <i>There are no poll in the system.</i>
     </c:when>
     <c:otherwise>
         <c:forEach items="${pollDatabase}" var="poll">
-            <div class="poll-item border p-3 mb-3 rounded shadow-sm">
+            <div class="poll-item">
                 <strong>Poll ${poll.id}:</strong>
-                <a href="<c:url value='/poll/${poll.id}' />" class="text-decoration-none">
+                <a href="<c:url value='/poll/${poll.id}' />">
                     <c:out value="${poll.question}"/>
                 </a>
-                <security:authorize access="hasRole('TEACHER')">
-                    <div class="mt-3">
-                        <a href="<c:url value='/poll/admin/polls/${poll.id}/edit' />"
-                        class="btn btn-warning btn-sm me-2">
-                            Edit
-                        </a>
-                        <form action="<c:url value='/poll/admin/polls/${poll.id}/delete' />"
-                            method="post" style="display:inline;">
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            <button type="submit"  class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Delete this poll and all its votes/comments/options?')">
-                                    Delete
-                            </button>
-                    </form>
-                </security:authorize>
             </div>
         </c:forEach>
     </c:otherwise>
