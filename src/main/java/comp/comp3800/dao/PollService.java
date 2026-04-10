@@ -2,6 +2,8 @@ package comp.comp3800.dao;
 
 import comp.comp3800.model.Poll;
 import comp.comp3800.model.PollOption;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +17,37 @@ public class PollService {
     private PollRepository pollRepository;
 
     @Autowired
-    private PollOptionRepository pollOptionRepository;   // 保留以防未來需要
+    private PollOptionRepository pollOptionRepository;
+
+    @Autowired
+    private PollVoteRepository pollVoteRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    // ====================== 強制刪除 Poll（支援有人投票的情況） ======================
+    @Transactional
+    public void forceDeletePoll(Long pollId) {
+        // 1. 刪除所有投票
+        entityManager.createNativeQuery("DELETE FROM poll_votes WHERE poll_id = :pollId")
+                .setParameter("pollId", pollId)
+                .executeUpdate();
+
+        // 2. 刪除所有選項
+        entityManager.createNativeQuery("DELETE FROM poll_options WHERE poll_id = :pollId")
+                .setParameter("pollId", pollId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                        "DELETE FROM comments WHERE target_type = 'POLL' AND target_id = :pollId")
+                .setParameter("pollId", pollId)
+                .executeUpdate();
+
+        pollRepository.deleteById(pollId);
+
+        System.out.println("✅ Force deleted poll ID: " + pollId
+                + " (votes + options + comments 已全部清除)");
+    }
 
     @Transactional
     public Poll createPoll(String question, List<String> optionTexts) {
@@ -35,11 +67,6 @@ public class PollService {
             pollOptionRepository.save(option);
         }
         return savedPoll;
-    }
-
-    @Transactional
-    public void deletePoll(Long pollId) {
-        pollRepository.deleteById(pollId);
     }
 
     @Transactional
