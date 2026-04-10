@@ -127,7 +127,7 @@ public class PollController {
     @PostMapping("/admin/polls/{pollId}/delete")
     public String deletePoll(@PathVariable Long pollId) {
         pollService.deletePoll(pollId);
-        return "redirect:/lecture/list";
+        return "redirect:/lecture/list?deleted=true";
     }
 
     // ====================== EDIT POLL ======================

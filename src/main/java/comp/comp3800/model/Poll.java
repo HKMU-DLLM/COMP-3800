@@ -22,49 +22,23 @@ public class Poll {
     @Column(name = "course_order")
     private Integer courseOrder;
 
-    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<PollOption> options;
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<PollOption> options = new ArrayList<>();
 
     public Poll() {}
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
+    public String getQuestion() { return question; }
+    public void setQuestion(String question) { this.question = question; }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
+    public Integer getCourseOrder() { return courseOrder; }
+    public void setCourseOrder(Integer courseOrder) { this.courseOrder = courseOrder; }
 
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public Integer getCourseOrder() {
-        return courseOrder;
-    }
-
-    public void setCourseOrder(Integer courseOrder) {
-        this.courseOrder = courseOrder;
-    }
-
-    public List<PollOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<PollOption> options) {
-        this.options = options;
-    }
+    public List<PollOption> getOptions() { return options; }
+    public void setOptions(List<PollOption> options) { this.options = options; }
 }
-

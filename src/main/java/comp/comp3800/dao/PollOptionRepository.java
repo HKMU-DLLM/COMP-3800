@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PollOptionRepository extends JpaRepository<PollOption, Long> {
-    void deleteByPollId(Long pollId);
 }

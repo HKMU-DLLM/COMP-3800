@@ -17,6 +17,4 @@ public interface PollVoteRepository extends JpaRepository<PollVote, Long> {
     @Query("SELECT pv.selectedOption.id, COUNT(pv) FROM PollVote pv " +
            "WHERE pv.poll.id = :pollId GROUP BY pv.selectedOption.id")
     List<Object[]> countVotesByPollId(@Param("pollId") Long pollId);
-
-    void deleteByPollId(Long pollId);
 }

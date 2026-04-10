@@ -15,10 +15,7 @@ public class PollService {
     private PollRepository pollRepository;
 
     @Autowired
-    private PollOptionRepository pollOptionRepository;
-
-    @Autowired
-    private PollVoteRepository pollVoteRepository;
+    private PollOptionRepository pollOptionRepository;   // 保留以防未來需要
 
     @Transactional
     public Poll createPoll(String question, List<String> optionTexts) {
@@ -42,8 +39,6 @@ public class PollService {
 
     @Transactional
     public void deletePoll(Long pollId) {
-        pollVoteRepository.deleteByPollId(pollId);
-        pollOptionRepository.deleteByPollId(pollId);
         pollRepository.deleteById(pollId);
     }
 

@@ -20,19 +20,20 @@
         </ol>
     </nav>
 <security:authorize access="hasRole('TEACHER')">
-    <div class="mb-3">
+    <div class="mb-4">
         <a href="<c:url value='/poll/admin/polls/${pollDatabase.id}/edit' />"
-           class="btn btn-warning btn-sm">
+           class="btn btn-warning btn-sm me-2">
             ✏️ Edit Poll
         </a>
-        
-        <form action="<c:url value='/poll/admin/polls/${pollDatabase.id}/delete' />"
-                method="post" style="display:inline;">
+
+        <form action="<c:url value='/poll/admin/polls/${pollDatabase.id}/delete' />" 
+              method="post" style="display:inline;">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <button type="submit" class="btn btn-danger btn-sm"
                     onclick="return confirm('Delete this poll and all its votes/comments/options?')">
-            🗑️ Delete Poll
-        </a>
+                🗑️ Delete Poll
+            </button>
+        </form>
     </div>
 </security:authorize>
 
