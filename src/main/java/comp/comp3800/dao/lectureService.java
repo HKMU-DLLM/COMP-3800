@@ -42,11 +42,11 @@ public class lectureService {
     }
 
     @Transactional
-    public CourseMaterial getAttachment(long ticketId, UUID attachmentId)
+    public CourseMaterial getAttachment(long lecId, UUID attachmentId)
             throws LectureNotFound, courseMaterialNotFound {
-        Lecture lec = lecRepo.findById(ticketId).orElse(null);
+        Lecture lec = lecRepo.findById(lecId).orElse(null);
         if (lec == null) {
-            throw new LectureNotFound(ticketId);
+            throw new LectureNotFound(lecId);
         }
         CourseMaterial courseMaterial = (CourseMaterial) cRepo.findById(attachmentId).orElse(null);
         if (courseMaterial == null) {
@@ -97,4 +97,40 @@ public class lectureService {
         return saved.getId();
     }
 
+    @Transactional(rollbackFor = LectureNotFound.class)
+    public void delete(long id) throws LectureNotFound {
+        Lecture deletedLecture = lecRepo.findById(id).orElse(null);
+        if (deletedLecture == null) {
+            throw new LectureNotFound(id);
+        }
+        lecRepo.delete(deletedLecture);
+    }
+
+    @Transactional(rollbackFor = courseMaterialNotFound.class)
+    public void deleteAttachment(long lectureId, Long materialId)
+            throws LectureNotFound, courseMaterialNotFound {
+
+        Lecture lecture = lecRepo.findById(lectureId).orElse(null);
+        if (lecture == null) {
+            throw new LectureNotFound(lectureId);
+        }
+
+        CourseMaterial toDelete = null;
+        for (CourseMaterial m : lecture.getMaterials()) {
+            if (m.getId().equals(materialId)) {
+                toDelete = m;
+                break;
+            }
+        }
+
+
+
+        // Remove from lecture's collection
+        lecture.getMaterials().remove(toDelete);
+        // Optionally delete the material row itself
+        cRepo.delete(toDelete);
+        // Persist lecture update
+        lecRepo.save(lecture);
+    }
 }
+

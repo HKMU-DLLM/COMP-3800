@@ -13,6 +13,11 @@
 </head>
 <body class="bg-light">
 
+<a href="<c:url value='/lecture/coursematerial/${lecture.id}/delete' />"
+   class="btn btn-danger btn-sm">
+    Delete lecture
+</a>
+
 <div class="container py-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -54,6 +59,10 @@
                                         <a href="<c:url value='/lecture/${lecture.id}/attachment/${material.id}' />"
                                            class="btn btn-outline-primary btn-sm px-4">
                                             Download
+                                        </a>
+                                        <a href="<c:url value='/lecture/coursematerial/${lecture.id}/attachment/${material.id}/delete' />"
+                                           class="btn btn-outline-danger btn-sm">
+                                            Delete file
                                         </a>
                                     </div>
                                 </c:forEach>

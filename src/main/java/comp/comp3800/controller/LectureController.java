@@ -1,6 +1,8 @@
 package comp.comp3800.controller;
 
 import comp.comp3800.dao.*;
+import comp.comp3800.exception.LectureNotFound;
+import comp.comp3800.exception.courseMaterialNotFound;
 import comp.comp3800.model.*;
 import comp.comp3800.view.DownloadingView;
 import jakarta.annotation.Resource;
@@ -22,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/lecture")
@@ -144,5 +147,20 @@ public class LectureController {
     public String deleteComment(@PathVariable Long commentId) {
         commentSer.deleteComment(commentId);
         return "redirect:/lecture/list";
+    }
+
+    @GetMapping("/coursematerial/{id}/delete")
+    public String deleteLecture(@PathVariable("id") long id) throws LectureNotFound {
+        lecService.delete(id);
+        return "redirect:/lecture/list";
+    }
+
+    @GetMapping("/coursematerial/{lectureId}/attachment/{materialId}/delete")
+    public String deleteAttachment(@PathVariable long lectureId,
+                                   @PathVariable Long materialId)
+            throws LectureNotFound, courseMaterialNotFound {
+
+        lecService.deleteAttachment(lectureId, materialId);
+        return "redirect:/lecture/coursematerial/" + lectureId;
     }
 }

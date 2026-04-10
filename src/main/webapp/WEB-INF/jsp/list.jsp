@@ -11,6 +11,8 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
+
+
 <h2>List of lecture</h2><a href="<c:url value="/lecture/create" />">Create a Lecture</a><br/><br/>
 
 <c:choose>
