@@ -36,6 +36,9 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-white py-3">
                     <h5 class="mb-0">Select an Option</h5>
+                    <c:if test="${not empty selectedOptionId}">
+                        <small class="text-success fw-bold">You have already voted. You can change your vote below.</small>
+                    </c:if>
                 </div>
 
                 <form action="<c:url value='/poll/vote' />" method="post">
@@ -46,14 +49,21 @@
                         <c:choose>
                             <c:when test="${not empty pollDatabase.options}">
                                 <c:forEach items="${optsDatabase}" var="opt">
-                                    <div class="form-check mb-2 poll-card">
-                                        <input class="form-check-input" type="radio"
-                                               name="selectedOptionId"
-                                               id="opt-${opt.id}"
-                                               value="${opt.id}" required>
-                                        <label class="form-check-label ms-2 h6 mb-0" for="opt-${opt.id}">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center poll-card">
+                                        <div class="form-check flex-grow-1">
+                                            <input class="form-check-input" type="radio"
+                                                   name="optionId"
+                                                   id="opt-${opt.id}"
+                                                   value="${opt.id}"
+                                                   ${selectedOptionId == opt.id.toString() ? 'checked' : ''}
+                                                   required>
+                                            <label class="form-check-label ms-2 h6 mb-0" for="opt-${opt.id}">
                                                 ${opt.optionText}
-                                        </label>
+                                            </label>
+                                        </div>
+                                        <span class="badge bg-primary fs-6">
+                                            ${voteCounts[opt.id] != null ? voteCounts[opt.id] : 0} votes
+                                        </span>
                                     </div>
                                 </c:forEach>
                             </c:when>
@@ -67,7 +77,12 @@
 
                     <div class="card-footer bg-white py-3 text-end">
                         <a href='<c:url value="/lecture/list" />' class="btn btn-link text-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary px-5">Submit Vote</button>
+                        <button type="submit" class="btn btn-primary px-5">
+                            <c:choose>
+                                <c:when test="${not empty selectedOptionId}">Update My Vote</c:when>
+                                <c:otherwise>Submit Vote</c:otherwise>
+                            </c:choose>
+                        </button>
                     </div>
                 </form>
             </div>
