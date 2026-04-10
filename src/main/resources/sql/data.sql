@@ -56,15 +56,13 @@ VALUES
 
 -- COMMENTS
 -- Lecture comments: target_type='LECTURE', target_id=lecture_id
-INSERT INTO comments (id, author_id, target_type, target_id, content, created_at)
+INSERT INTO comments (author_id, target_type, target_id, content, created_at)
 VALUES
-    (1, 1, 'LECTURE', 1, 'Welcome! Please read the course overview before next week.', CURRENT_TIMESTAMP),
-    (2, 2, 'LECTURE', 1, 'Thanks! Could we get examples of what to expect in assignments?', CURRENT_TIMESTAMP),
-    (3, 3, 'LECTURE', 2, 'The summary helped—looking forward to the practical part.', CURRENT_TIMESTAMP);
+    (1, 'LECTURE', 1, 'Welcome! Please read the course overview before next week.', CURRENT_TIMESTAMP),
+    (2, 'LECTURE', 1, 'Thanks! Could we get examples of what to expect in assignments?', CURRENT_TIMESTAMP),
+    (3, 'LECTURE', 2, 'The summary helped—looking forward to the practical part.', CURRENT_TIMESTAMP);
 
--- Poll comments: target_type='POLL', target_id=poll_id
-INSERT INTO comments (id, author_id, target_type, target_id, content, created_at)
+INSERT INTO comments (author_id, target_type, target_id, content, created_at)
 VALUES
-    (4, 1, 'POLL', 1, 'Vote based on what will most help the project this term.', CURRENT_TIMESTAMP),
-    (5, 2, 'POLL', 2, 'I think a mixed approach would work best.', CURRENT_TIMESTAMP);
-
+    (1, 'POLL', 1, 'Vote based on what will most help the project this term.', CURRENT_TIMESTAMP),
+    (2, 'POLL', 2, 'I think a mixed approach would work best.', CURRENT_TIMESTAMP);
