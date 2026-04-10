@@ -25,6 +25,9 @@ public class Poll {
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PollOption> options = new ArrayList<>();
 
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PollVote> votes = new ArrayList<>();
+
     public Poll() {}
 
     public Long getId() { return id; }
@@ -41,4 +44,7 @@ public class Poll {
 
     public List<PollOption> getOptions() { return options; }
     public void setOptions(List<PollOption> options) { this.options = options; }
+
+    public List<PollVote> getVotes() { return votes; }
+    public void setVotes(List<PollVote> votes) { this.votes = votes; }
 }
