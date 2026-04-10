@@ -13,4 +13,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     void deleteByTargetTypeAndTargetId(Comment.TargetType targetType, Long targetId);
     List<Comment> findByTargetTypeAndTargetIdOrderByCreatedAtAsc(
             Comment.TargetType targetType, Long targetId);
+    void deleteByAuthorId(Long authorId);
 }

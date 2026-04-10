@@ -22,7 +22,7 @@
 </security:authorize>
 
 <security:authorize access="hasRole('TEACHER')">
-    <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
+    <a href="<c:url value="/admin/users" />">Manage User Accounts</a>
 </security:authorize>
 
 <h2>List of lecture</h2>

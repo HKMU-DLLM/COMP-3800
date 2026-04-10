@@ -5,15 +5,30 @@ import comp.comp3800.model.User;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import comp.comp3800.dao.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
+import comp.comp3800.dao.CommentRepository;
+import comp.comp3800.dao.PollVoteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.Principal;
 
 @Controller
 public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CommentRepository commentRepo;
+
+    @Autowired
+    private PollVoteRepository pollVoteRepo;
 
     @Resource
     private UserRepository userRepo;
@@ -160,6 +175,81 @@ public class UserController {
         userRepo.save(user);
 
         return "redirect:/userinfo";
+    }
+
+    @GetMapping("/admin/users")
+    public String listUsers(Model model) {
+        List<User> users = userRepo.findAll();
+        model.addAttribute("userList", users);
+        return "listusers";
+    }
+
+    @GetMapping("/admin/users/new")
+    public String showNewUserForm(Model model) {
+        model.addAttribute("userForm", new SignupForm());
+        return "newuser-admin";
+    }
+
+    @PostMapping("/admin/users/new")
+    public String createNewUser(@ModelAttribute("userForm") SignupForm form, Model model) {
+        if (userRepo.findByUsername(form.getUsername()).isPresent()) {
+            model.addAttribute("error", "Username already exists!");
+            return "newuser-admin";
+        }
+
+        User user = new User();
+        user.setUsername(form.getUsername());
+        user.setPassword(form.getPassword());
+        user.setFullName(form.getFullName());
+        user.setEmail(form.getEmail());
+        user.setPhone(form.getPhone());
+        user.setRole(User.Role.valueOf(form.getRole().toUpperCase()));
+        user.setEnabled(true);
+
+        userRepo.save(user);
+        return "redirect:/admin/users";
+    }
+
+    @GetMapping("/admin/users/{id}/edit")
+    public String showEditUserForm(@PathVariable Long id, Model model) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        ProfileForm form = new ProfileForm();
+        form.setId(user.getId());
+        form.setUsername(user.getUsername());
+        form.setFullName(user.getFullName());
+        form.setEmail(user.getEmail());
+        form.setPhone(user.getPhone());
+        form.setRole(user.getRole().name());
+
+        model.addAttribute("userForm", form);
+        model.addAttribute("user", user);
+        return "edituser-admin";
+    }
+
+    @PostMapping("/admin/users/{id}/edit")
+    public String updateUser(@PathVariable Long id, @ModelAttribute("userForm") ProfileForm form) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        user.setFullName(form.getFullName());
+        user.setEmail(form.getEmail());
+        user.setPhone(form.getPhone());
+        user.setRole(User.Role.valueOf(form.getRole()));
+
+        if (form.getPassword() != null && !form.getPassword().isBlank()) {
+            user.setPassword(form.getPassword());
+        }
+
+        userRepo.save(user);
+        return "redirect:/admin/users";
+    }
+
+@   PostMapping("/admin/users/{id}/delete")
+    public String deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return "redirect:/admin/users";
     }
 }
 
