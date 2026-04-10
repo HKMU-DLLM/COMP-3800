@@ -8,5 +8,9 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+
     List<Comment> findByTargetType(Comment.TargetType targetType);
+
+    List<Comment> findByTargetTypeAndTargetIdOrderByCreatedAtAsc(
+            Comment.TargetType targetType, Long targetId);
 }

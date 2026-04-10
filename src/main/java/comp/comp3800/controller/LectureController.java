@@ -23,7 +23,6 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 
-
 @Controller
 @RequestMapping("/lecture")
 public class LectureController {
@@ -37,7 +36,6 @@ public class LectureController {
     @Autowired
     private PollRepository pollRepo;
 
-
     @Autowired
     private UserRepository userRepo;
 
@@ -50,25 +48,28 @@ public class LectureController {
     @Autowired
     private CourseMaterialRepository courseMaterialRepo;
 
-@GetMapping(value = {"", "/list"})
-public String list(ModelMap model) {
-    List<Lecture> lectures = lectureRepo.findAll();
-    List<Poll> polls = pollRepo.findAll();
-    List<Comment> lectComments = commentSer.getCommentsForLect();
+    @GetMapping(value = {"", "/list"})
+    public String list(ModelMap model) {
+        List<Lecture> lectures = lectureRepo.findAll();
+        List<Poll> polls = pollRepo.findAll();
+        List<Comment> lectComments = commentSer.getCommentsForLect();
 
-    model.addAttribute("lectureDatabase", lectures);
-    model.addAttribute("pollDatabase", polls);
-    model.addAttribute("commentDatabase", lectComments);
+        model.addAttribute("lectureDatabase", lectures);
+        model.addAttribute("pollDatabase", polls);
+        model.addAttribute("commentDatabase", lectComments);
 
-    return "list";
-}
+        return "list";
+    }
 
     @GetMapping("/coursematerial/{id}")
     public String viewMaterial(@PathVariable Long id, Model model) {
         Lecture lecture = lectureRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        List<Comment> comments = commentSer.getCommentsForLecture(id);
+
         model.addAttribute("lecture", lecture);
+        model.addAttribute("commentDatabase", comments);
         return "coursematerial";
     }
 
@@ -83,50 +84,18 @@ public String list(ModelMap model) {
         private int order;
         private List<MultipartFile> attachments;
 
-        // Getters and Setters of customerName, subject, body, attachments
-
-
-        public String getSummary() {
-            return summary;
-        }
-
-        public void setSummary(String summary) {
-            this.summary = summary;
-        }
-
-        //public int getOrder() {
-            //return order;
-        //}
-
-        //public void setOrder(int order) {
-            //this.order = order;
-        //}
-
-        public List<MultipartFile> getAttachments() {
-            return attachments;
-        }
-
-        public void setAttachments(List<MultipartFile> attachments) {
-            this.attachments = attachments;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
+        public String getSummary() { return summary; }
+        public void setSummary(String summary) { this.summary = summary; }
+        public List<MultipartFile> getAttachments() { return attachments; }
+        public void setAttachments(List<MultipartFile> attachments) { this.attachments = attachments; }
+        public String getTitle() { return title; }
+        public void setTitle(String title) { this.title = title; }
     }
+
     @PostMapping("/create")
     public String create(@ModelAttribute("lectureForm") LectureController.Form form,
                          Principal principal) throws IOException {
-        lecService.createLecture(
-                form.getTitle(),
-                form.getSummary(),
-                //form.getOrder(),
-                form.getAttachments()
-        );
+        lecService.createLecture(form.getTitle(), form.getSummary(), form.getAttachments());
         return "redirect:/lecture/list";
     }
 
@@ -142,11 +111,8 @@ public String list(ModelMap model) {
         comment.setAuthor(currentUser);
 
         commentRepo.save(comment);
-
         return "redirect:/coursematerial/{id}";
     }
-
-
 
     @GetMapping("/{lectureId}/attachment/{materialId}")
     public View download(@PathVariable("lectureId") long lectureId,
@@ -154,30 +120,29 @@ public String list(ModelMap model) {
 
         CourseMaterial material = courseMaterialRepo.findById(materialId).orElse(null);
 
-        if (material != null
-                && material.getLecture() != null
-                && material.getLecture().getId() != null
-                && material.getLecture().getId() == lectureId) {
-
+        if (material != null && material.getLecture() != null && material.getLecture().getId() == lectureId) {
             try {
                 Path path = Paths.get(material.getStoredFilePath());
                 byte[] data = Files.readAllBytes(path);
-
-                return new DownloadingView(
-                        material.getOriginalFileName(),
-                        material.getContentType(),
-                        data
-                );
+                return new DownloadingView(material.getOriginalFileName(), material.getContentType(), data);
             } catch (IOException e) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found on server");
             }
         }
-
         return new RedirectView("/lecture/list", true);
     }
 
+    @PostMapping("/coursematerial/comment")
+    public String addLectureComment(@RequestParam Long lectureId,
+                                    @RequestParam String content,
+                                    Principal principal) {
+        commentSer.addCommentToLecture(lectureId, content, principal);
+        return "redirect:/lecture/coursematerial/" + lectureId;
+    }
 
-
+    @PostMapping("/admin/comments/delete/{commentId}")
+    public String deleteComment(@PathVariable Long commentId) {
+        commentSer.deleteComment(commentId);
+        return "redirect:/lecture/list";
+    }
 }
-
-

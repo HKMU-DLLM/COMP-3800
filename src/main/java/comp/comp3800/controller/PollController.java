@@ -1,9 +1,9 @@
 package comp.comp3800.controller;
 
 import comp.comp3800.dao.CommentRepository;
+import comp.comp3800.dao.CommentService;
 import comp.comp3800.dao.PollRepository;
 import comp.comp3800.dao.UserRepository;
-import comp.comp3800.dao.CommentService;
 import comp.comp3800.model.Comment;
 import comp.comp3800.model.Poll;
 import comp.comp3800.model.PollOption;
@@ -38,12 +38,12 @@ public class PollController {
     public String viewPoll(@PathVariable Long id, Model model) {
         Poll poll = pollRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        List<PollOption> options = poll.getOptions();
-        List<Comment> pollComments = commentSer.getCommentsForPoll();
+
+        List<Comment> comments = commentSer.getCommentsForPoll(id);
 
         model.addAttribute("pollDatabase", poll);
-        model.addAttribute("commentDatabase", pollComments);
-        model.addAttribute("optsDatabase", options);
+        model.addAttribute("commentDatabase", comments);
+        model.addAttribute("optsDatabase", poll.getOptions());
 
         return "poll";
     }
@@ -65,7 +65,14 @@ public class PollController {
         comment.setAuthor(currentUser);
 
         commentRepo.save(comment);
-
         return "redirect:/poll/{id}";
+    }
+
+    @PostMapping("/comment")
+    public String addPollComment(@RequestParam Long pollId,
+                                 @RequestParam String content,
+                                 Principal principal) {
+        commentSer.addCommentToPoll(pollId, content, principal);
+        return "redirect:/poll/" + pollId;
     }
 }

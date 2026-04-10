@@ -7,6 +7,7 @@
     <style>
         .poll-card { border-left: 5px solid #0d6efd; transition: 0.3s; }
         .poll-card:hover { background-color: #f8f9fa; }
+        .comment-card { border-left: 4px solid #28a745; }
     </style>
 </head>
 <body class="bg-light">
@@ -14,7 +15,7 @@
 <div class="container py-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<html value='/lecture/list/'>">All Lectures</a></li>
+            <li class="breadcrumb-item"><a href="/lecture/list">All Lectures</a></li>
             <li class="breadcrumb-item active">${pollDatabase.question}</li>
         </ol>
     </nav>
@@ -39,6 +40,7 @@
 
                 <form action="<c:url value='/poll/vote' />" method="post">
                     <input type="hidden" name="pollId" value="${pollDatabase.id}" />
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
                     <div class="list-group list-group-flush">
                         <c:choose>
@@ -70,48 +72,60 @@
                 </form>
             </div>
         </div>
+    </div>
 
-        <hr class="my-5">
+    <hr class="my-5">
 
-        <div class="container mb-5">
-            <h3>Comments</h3>
+    <div class="container mb-5">
+        <h3>Comments</h3>
 
+        <security:authorize access="isAuthenticated()">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form action="<c:url value='/poll/comment/add' />" method="post">
+                    <form action="<c:url value='/poll/comment' />" method="post">
+                        <input type="hidden" name="pollId" value="${pollDatabase.id}" />
                         <div class="mb-3">
-                            <textarea name="content" class="form-control" rows="3" placeholder="Write a comment..." required></textarea>
+                            <textarea name="content" class="form-control" rows="3" 
+                                      placeholder="Write a comment..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
                     </form>
                 </div>
             </div>
+        </security:authorize>
 
-            <div class="comment-list">
-                <c:forEach items="${commentDatabase}" var="comment">
-                    <c:if test="${comment.targetType == 'POLL'}">
-                        <div class="d-flex mb-3">
-                            <div class="flex-shrink-0">
-                                <img src="https://ui-avatars.com/api/?name=${comment.author.username}&background=random"
-                                     class="rounded-circle" width="40">
+        <div class="comment-list">
+            <c:forEach items="${commentDatabase}" var="comment">
+                <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                        <img src="https://ui-avatars.com/api/?name=${comment.author.username}&background=random"
+                             class="rounded-circle" width="40">
+                    </div>
+                    <div class="ms-3 card w-100 comment-card">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-1 fw-bold text-primary">${comment.author.fullName}</h6>
+                                <small class="text-muted">${comment.getPrettyTime()}</small>
                             </div>
-                            <div class="ms-3 card w-100">
-                                <div class="card-body p-2">
-                                    <div class="d-flex justify-content-between">
-                                        <h6 class="mb-1 fw-bold text-primary">${comment.author.username}</h6>
-                                        <small class="text-muted">${comment.getPrettyTime()}</small>
-                                    </div>
-                                    <p class="mb-0 text-secondary">${comment.content}</p>
-                                </div>
-                            </div>
+                            <p class="mb-0 text-secondary">${comment.content}</p>
+
+                            <security:authorize access="hasRole('TEACHER')">
+                                <form action="<c:url value='/lecture/admin/comments/delete/${comment.id}' />" 
+                                      method="post" style="display:inline;" class="mt-2">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                                </form>
+                            </security:authorize>
                         </div>
-                    </c:if>
-                </c:forEach>
+                    </div>
+                </div>
+            </c:forEach>
 
-                <c:if test="${empty commentDatabase}">
-                    <p class="text-muted">No comments yet. Be the first to say something!</p>
-                </c:if>
-            </div>
+            <c:if test="${empty commentDatabase}">
+                <p class="text-muted">No comments yet. Be the first to say something!</p>
+            </c:if>
         </div>
     </div>
 </div>
