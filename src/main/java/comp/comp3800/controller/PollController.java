@@ -3,6 +3,7 @@ package comp.comp3800.controller;
 import comp.comp3800.dao.CommentRepository;
 import comp.comp3800.dao.CommentService;
 import comp.comp3800.dao.PollRepository;
+import comp.comp3800.dao.PollService;
 import comp.comp3800.dao.PollVoteService;
 import comp.comp3800.dao.UserRepository;
 import comp.comp3800.model.Comment;
@@ -40,6 +41,9 @@ public class PollController {
 
     @Autowired
     private PollVoteService pollVoteService;
+
+    @Autowired
+    private PollService pollService;
 
     @GetMapping("/{id}")
     public String viewPoll(@PathVariable Long id, Model model, Principal principal) {
@@ -100,5 +104,49 @@ public class PollController {
 
         commentRepo.save(comment);
         return "redirect:/poll/" + pollId;
+    }
+
+    @GetMapping("/admin/polls/new")
+    public String showCreatePollForm(Model model) {
+        model.addAttribute("pollForm", new PollForm());
+        return "create-poll";
+    }
+
+    @PostMapping("/admin/polls/new")
+    public String createPoll(@ModelAttribute("pollForm") PollForm form) {
+        List<String> options = List.of(
+            form.getOption1(), form.getOption2(), form.getOption3(),
+            form.getOption4(), form.getOption5()
+        );
+        pollService.createPoll(form.getQuestion(), options);
+        return "redirect:/lecture/list";
+    }
+
+    @PostMapping("/admin/polls/{pollId}/delete")
+    public String deletePoll(@PathVariable Long pollId) {
+        pollService.deletePoll(pollId);
+        return "redirect:/lecture/list";
+    }
+
+    public static class PollForm {
+        private String question;
+        private String option1;
+        private String option2;
+        private String option3;
+        private String option4;
+        private String option5;
+
+        public String getQuestion() { return question; }
+        public void setQuestion(String question) { this.question = question; }
+        public String getOption1() { return option1; }
+        public void setOption1(String option1) { this.option1 = option1; }
+        public String getOption2() { return option2; }
+        public void setOption2(String option2) { this.option2 = option2; }
+        public String getOption3() { return option3; }
+        public void setOption3(String option3) { this.option3 = option3; }
+        public String getOption4() { return option4; }
+        public void setOption4(String option4) { this.option4 = option4; }
+        public String getOption5() { return option5; }
+        public void setOption5(String option5) { this.option5 = option5; }
     }
 }

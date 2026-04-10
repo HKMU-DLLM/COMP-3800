@@ -33,6 +33,9 @@
 </c:choose>
 
 <h2>List of Poll</h2>
+<security:authorize access="hasRole('TEACHER')">
+    <a href="<c:url value='/poll/admin/polls/new' />" class="btn btn-success mb-3">+ Add New Poll</a>
+</security:authorize>
 <c:choose>
     <c:when test="${fn:length(pollDatabase) == 0}">
         <i>There are no poll in the system.</i>
@@ -44,6 +47,13 @@
                 <a href="<c:url value='/poll/${poll.id}' />">
                     <c:out value="${poll.question}"/>
                 </a>
+                <security:authorize access="hasRole('TEACHER')">
+                    <form action="<c:url value='/poll/admin/polls/${poll.id}/delete' />"
+                            method="post" style="display:inline;">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-danger btn-sm"onclick="return confirm('Delete this poll and all its votes/comments/options?')">Delete</button>
+                    </form>
+                </security:authorize>
             </div>
         </c:forEach>
     </c:otherwise>
