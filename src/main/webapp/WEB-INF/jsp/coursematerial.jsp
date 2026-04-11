@@ -14,7 +14,7 @@
 <body class="bg-light">
 
 <security:authorize access="hasRole('TEACHER')">
-<a href="<c:url value='/coursematerial/${lecture.id}/delete' />"
+<a href="<c:url value='/lecture/coursematerial/${lecture.id}/delete' />"
    class="btn btn-danger btn-sm">
     Delete lecture
 </a>

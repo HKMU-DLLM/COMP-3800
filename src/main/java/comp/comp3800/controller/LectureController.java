@@ -106,7 +106,7 @@ public class LectureController {
         return new RedirectView("/indexpage", true);
     }
 
-    @PostMapping("/coursematerial/{lectureId}/upload")
+    @PostMapping("/{lectureId}/upload")
     public String handleFileUpload(@PathVariable("lectureId") Long lectureId,
                                    @RequestParam("attachments") MultipartFile[] attachments,
                                    RedirectAttributes redirectAttributes) {
@@ -124,6 +124,10 @@ public class LectureController {
         redirectAttributes.addAttribute("id", lectureId);
         return "redirect:/lecture/coursematerial/" + lectureId;
     }
+
+
+
+
 
     @GetMapping("/coursematerial/{lectureId}/attachment/{materialId}/delete")
     public String deleteAttachment(@PathVariable long lectureId,
@@ -174,8 +178,9 @@ public class LectureController {
         return "redirect:/lecture/coursematerial/{id}";
     }
 
+
     @GetMapping("/coursematerial/{id}/delete")
-    public String deleteLecture(@PathVariable("id") long id) throws LectureNotFound {
+    public String delete(@PathVariable("id") long id) throws LectureNotFound {
         lecService.delete(id);
         return "redirect:/indexpage";
     }
