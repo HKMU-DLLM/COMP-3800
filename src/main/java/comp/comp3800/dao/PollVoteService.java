@@ -4,6 +4,8 @@ import comp.comp3800.model.Poll;
 import comp.comp3800.model.PollOption;
 import comp.comp3800.model.PollVote;
 import comp.comp3800.model.User;
+import comp.comp3800.model.VotingHistoryItem;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,10 @@ public class PollVoteService {
 
     @Autowired
     private PollRepository pollRepository;
+
+    public List<VotingHistoryItem> getVotingHistory(Long voterId) {
+        return pollVoteRepository.findHistoryByVoterId(voterId);
+    }
 
     public Optional<PollVote> getUserVote(Long pollId, String username) {
         User user = userRepository.findByUsername(username).orElse(null);

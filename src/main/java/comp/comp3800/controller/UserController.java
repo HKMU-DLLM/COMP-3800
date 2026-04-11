@@ -1,7 +1,9 @@
 package comp.comp3800.controller;
 
 import comp.comp3800.dao.UserRepository;
+import comp.comp3800.dao.PollVoteService;
 import comp.comp3800.model.User;
+import comp.comp3800.model.VotingHistoryItem;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,9 @@ import java.security.Principal;
 
 @Controller
 public class UserController {
+
+    @Autowired
+    private PollVoteService pollVoteService;
 
     @Autowired
     private UserService userService;
@@ -250,6 +255,34 @@ public class UserController {
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/me/voting-history")
+    public String showVotingHistory(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        User user = userRepo.findByUsername(principal.getName())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        List<VotingHistoryItem> history = pollVoteService.getVotingHistory(user.getId());
+
+        model.addAttribute("votingHistory", history);
+        model.addAttribute("user", user);
+        return "voting-history";
+    }
+    @GetMapping("/admin/users/{userId}/voting-history")
+    public String showUserVotingHistory(@PathVariable Long userId, Model model) {
+        User targetUser = userRepo.findById(userId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        List<VotingHistoryItem> history = pollVoteService.getVotingHistory(userId);
+
+        model.addAttribute("votingHistory", history);
+        model.addAttribute("user", targetUser);
+        model.addAttribute("isAdminView", true);
+        return "voting-history";
     }
 }
 

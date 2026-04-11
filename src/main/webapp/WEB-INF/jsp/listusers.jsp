@@ -10,7 +10,7 @@
     <h2 class="mb-4">User Management</h2>
     
     <a href="<c:url value='/admin/users/new' />" class="btn btn-success mb-3">+ Add New User</a>
-    <a href="<c:url value='/lecture/list' />" class="btn btn-secondary mb-3">Back to Course Home</a>
+    <a href="<c:url value='/lecture/list' />" class="btn btn-secondary mb-3">← Back to Course Home</a>
 
     <table class="table table-striped table-hover align-middle">
         <thead class="table-dark">
@@ -36,8 +36,15 @@
                     <td><span class="badge ${u.role == 'TEACHER' ? 'bg-warning' : 'bg-info'}">${u.role}</span></td>
                     <td>${u.enabled ? 'Yes' : 'No'}</td>
                     <td>
-                        <a href="<c:url value='/admin/users/${u.id}/edit' />" class="btn btn-warning btn-sm">Edit</a>
+                        <!-- Edit -->
+                        <a href="<c:url value='/admin/users/${u.id}/edit' />" 
+                           class="btn btn-warning btn-sm">Edit</a>
                         
+                        <!-- View Voting History (只有老師能用) -->
+                        <a href="<c:url value='/admin/users/${u.id}/voting-history' />" 
+                           class="btn btn-info btn-sm">📊 History</a>
+                        
+                        <!-- Delete -->
                         <form action="<c:url value='/admin/users/${u.id}/delete' />" method="post" style="display:inline;">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                             <button type="submit" class="btn btn-danger btn-sm"
