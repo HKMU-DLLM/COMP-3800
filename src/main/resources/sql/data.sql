@@ -1,12 +1,16 @@
 INSERT INTO users (username, password, full_name, email, phone, role, enabled) VALUES
-('teacher1', '1234', 'Teacher One', 'teacher1@example.com', '111-111-1111', 'TEACHER', TRUE),
-('student1', 'aaaa', 'Student One', 'student1@example.com', '222-222-2222', 'STUDENT', TRUE),
-('student2', 'ssss', 'Student Two', 'student2@example.com', '333-333-3333', 'STUDENT', TRUE);
+('teacher1', '1234', 'Teacher One', 'teacher1@edu.com', '12345678', 'TEACHER', TRUE),
+('student1', 'aaaa', 'Student One', 'student1@edu.hk', '12345678', 'STUDENT', TRUE),
+('student2', 'ssss', 'Student Two', 'student2@edu.hk', '12345678', 'STUDENT', TRUE);
+('profkim', '1234', 'Kim Jong Un', 'kimjongun@edu.hk', '12345678', 'TEACHER', TRUE),
+('profobama', '123456', 'Obama', 'obama@edu.hk', '87654321', 'TEACHER', TRUE),
+('pdiddy', 'aaaa', 'Puff Daddy', 'pdiddy@edu.hk', '23456789', 'STUDENT', TRUE),
+('jefferyepstein', 'ssss', 'Jeffery Epstein', 'epstein@edu.hk', '34567890', 'STUDENT', TRUE);
 
 INSERT INTO lectures (title, summary) VALUES
-('Introduction to the Course', 'Summary here...'),
-('Core Concepts', 'Summary here...'),
-('Practice and Review', 'Summary here...');
+('Overview of Web Applications', 'Overview of this lecture'),
+('Servlet', 'What is a Servlet?'),
+('JSP, JavaBean', 'Jakarta Server Pages (JSP)');
 
 INSERT INTO course_materials (lecture_id, original_file_name, stored_file_path, content_type, file_size, uploaded_at) VALUES
 (1, 'Lecture1-Notes.pdf', 'src/uploads/Lecture1-Notes.pdf', 'application/pdf', 1423, CURRENT_TIMESTAMP),
