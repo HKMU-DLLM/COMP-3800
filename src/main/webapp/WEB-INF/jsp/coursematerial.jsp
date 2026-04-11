@@ -45,7 +45,7 @@
                 <div class="card-header bg-white py-3">
                     <h5 class="mb-0">Downloadable Materials</h5>
                     <security:authorize access="hasRole('TEACHER')">
-                        <form action="${pageContext.request.contextPath}/lecture/coursematerial/${lecture.id}/upload?${_csrf.parameterName}=${_csrf.token}"
+                        <form action="${pageContext.request.contextPath}/lecture/${lecture.id}/upload"
                               method="post"
                               enctype="multipart/form-data">
 

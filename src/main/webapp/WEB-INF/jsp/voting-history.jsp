@@ -15,7 +15,7 @@
     </h2>
     <p class="text-muted">Logged in as: <strong>${user.fullName}</strong> (${user.username})</p>
 
-    <a href="<c:url value='/indexpage' />" class="btn btn-secondary mb-3">← Back to Course Home</a>
+    <a href="<c:url value='/userinfo' />" class="btn btn-secondary mb-3">← Back to user information</a>
 
     <c:choose>
         <c:when test="${empty votingHistory}">

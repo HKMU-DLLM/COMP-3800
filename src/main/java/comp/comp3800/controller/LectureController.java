@@ -122,7 +122,7 @@ public class LectureController {
         }
 
         redirectAttributes.addAttribute("id", lectureId);
-        return "redirect:/lecture/coursematerial/" + lectureId;
+        return "redirect:/lecture/coursematerial/{id}";
     }
 
 
