@@ -37,6 +37,10 @@
             📊 My Voting History
         </a>
 
+        <a href="<c:url value='/me/comment-history' />" class="btn btn-info">
+            📊 My Comment History
+        </a>
+
         <!-- Back to Home -->
         <a href="<c:url value='/indexpage' />" class="btn btn-secondary">
             ← Back to Course Home
