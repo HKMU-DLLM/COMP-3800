@@ -38,14 +38,6 @@
     </div>
     <br/>
 
-    <div>
-        <label>Role:</label><br/>
-        <select name="role">
-            <option value="STUDENT" ${user.role == 'STUDENT' ? 'selected' : ''}>Student</option>
-            <option value="TEACHER" ${user.role == 'TEACHER' ? 'selected' : ''}>Teacher</option>
-        </select>
-    </div>
-    <br/>
 
     <div>
         <input type="submit" value="Save Changes" />
