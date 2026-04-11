@@ -37,7 +37,16 @@
                     <c:forEach items="${commentHistory}" var="c">
                         <tr>
                             <td><span class="badge ${c.targetType() == 'Lecture' ? 'bg-primary' : 'bg-success'}">${c.targetType()}</span></td>
-                            <td>${c.targetTitle()}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${empty c.targetTitle()}">
+                                        <span class="badge bg-warning text-dark">${c.targetType()} Is No Longer Exist
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${c.targetTitle()}
+                                    </c:otherwise>
+                                </c:choose>
                             <td>${c.content()}</td>
                             <td>${c.createdAt().toString().replace('T', ' ').substring(0,16)}</td>
                         </tr>
