@@ -40,9 +40,13 @@
                         <a href="<c:url value='/admin/users/${u.id}/edit' />" 
                            class="btn btn-warning btn-sm">Edit</a>
                         
-                        <!-- View Voting History (只有老師能用) -->
+                        <!-- Voting History -->
                         <a href="<c:url value='/admin/users/${u.id}/voting-history' />" 
-                           class="btn btn-info btn-sm">📊 History</a>
+                           class="btn btn-info btn-sm">📊 Vote History</a>
+                        
+                        <!-- Comment History -->
+                        <a href="<c:url value='/admin/users/${u.id}/comment-history' />" 
+                           class="btn btn-primary btn-sm">💬 Comment History</a>
                         
                         <!-- Delete -->
                         <form action="<c:url value='/admin/users/${u.id}/delete' />" method="post" style="display:inline;">

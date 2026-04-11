@@ -2,6 +2,7 @@ package comp.comp3800.controller;
 
 import comp.comp3800.dao.UserRepository;
 import comp.comp3800.dao.PollVoteService;
+import comp.comp3800.model.CommentHistoryItem;
 import comp.comp3800.model.User;
 import comp.comp3800.model.VotingHistoryItem;
 import jakarta.annotation.Resource;
@@ -17,14 +18,17 @@ import java.util.List;
 import comp.comp3800.dao.CommentRepository;
 import comp.comp3800.dao.PollVoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.security.Principal;
+import comp.comp3800.dao.CommentService;
 
 @Controller
 public class UserController {
 
     @Autowired
     private PollVoteService pollVoteService;
+
+    @Autowired
+    private CommentService commentSer;
 
     @Autowired
     private UserService userService;
@@ -283,6 +287,35 @@ public class UserController {
         model.addAttribute("user", targetUser);
         model.addAttribute("isAdminView", true);
         return "voting-history";
+    }
+    @GetMapping("/me/comment-history")
+    public String showMyCommentHistory(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        User user = userRepo.findByUsername(principal.getName())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        List<CommentHistoryItem> history = commentSer.getCommentHistory(user.getId());
+
+        model.addAttribute("commentHistory", history);
+        model.addAttribute("user", user);
+        model.addAttribute("isAdminView", false);
+        return "comment-history";
+    }
+
+    // 老師查看其他人的留言歷史
+    @GetMapping("/admin/users/{userId}/comment-history")
+    public String showUserCommentHistory(@PathVariable Long userId, Model model) {
+        User targetUser = userRepo.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        List<CommentHistoryItem> history = commentSer.getCommentHistory(userId);
+
+        model.addAttribute("commentHistory", history);
+        model.addAttribute("user", targetUser);
+        model.addAttribute("isAdminView", true);
+        return "comment-history";
     }
 }
 

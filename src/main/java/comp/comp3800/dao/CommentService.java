@@ -1,6 +1,7 @@
 package comp.comp3800.dao;
 
 import comp.comp3800.model.Comment;
+import comp.comp3800.model.CommentHistoryItem;
 import comp.comp3800.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,5 +69,9 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
+    }
+    
+    public List<CommentHistoryItem> getCommentHistory(Long authorId) {
+    return commentRepository.findCommentHistoryByAuthorId(authorId);
     }
 }
