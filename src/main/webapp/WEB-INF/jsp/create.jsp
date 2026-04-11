@@ -7,7 +7,6 @@
 <body>
 <h2>Create a Lecture</h2>
 
-<%--@elvariable id="lectureForm" type=""--%>
 <form:form method="POST"
            action="${pageContext.request.contextPath}/lecture/create"
            enctype="multipart/form-data"
@@ -18,9 +17,6 @@
 
     <form:label path="summary">Summary</form:label><br/>
     <form:textarea path="summary" rows="5" cols="30"/><br/><br/>
-
-    <%--<form:label path="order">Lecture Order</form:label><br/>--%>
-    <%--<form:input type="number" path="order"/><br/><br/>--%>
 
     <b>Attachments</b><br/>
     <input type="file" name="attachments" multiple="multiple"/><br/><br/>

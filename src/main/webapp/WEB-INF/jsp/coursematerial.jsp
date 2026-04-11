@@ -14,7 +14,7 @@
 <body class="bg-light">
 
 <security:authorize access="hasRole('TEACHER')">
-<a href="<c:url value='/lecture/coursematerial/${lecture.id}/delete' />"
+<a href="<c:url value='/coursematerial/${lecture.id}/delete' />"
    class="btn btn-danger btn-sm">
     Delete lecture
 </a>
@@ -23,7 +23,7 @@
 <div class="container py-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/lecture/list">All Lectures</a></li>
+            <li class="breadcrumb-item"><a href="/indexpage">All Lectures</a></li>
             <li class="breadcrumb-item active">${lecture.title}</li>
         </ol>
     </nav>
@@ -44,6 +44,23 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-white py-3">
                     <h5 class="mb-0">Downloadable Materials</h5>
+                    <security:authorize access="hasRole('TEACHER')">
+                        <form action="${pageContext.request.contextPath}/lecture/coursematerial/${lecture.id}/upload?${_csrf.parameterName}=${_csrf.token}"
+                              method="post"
+                              enctype="multipart/form-data">
+
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+                            <input type="hidden" name="lectureId" value="${lecture.id}" />
+
+                            <div class="mb-3">
+                                <label for="attachments" class="form-label">Select Files:</label>
+                                <input type="file" name="attachments" id="attachments" class="form-control" multiple />
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Upload Materials</button>
+                        </form>
+                    </security:authorize>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
@@ -92,12 +109,14 @@
         <security:authorize access="isAuthenticated()">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form action="<c:url value='/lecture/coursematerial/comment' />" method="post">
+                    <form action="<c:url value='/lecture/coursematerial/comment/add' />" method="post">
+                        <input type="hidden" name="pollId" value="${poll.id}" />
                         <input type="hidden" name="lectureId" value="${lecture.id}" />
                         <div class="mb-3">
                             <textarea name="content" class="form-control" rows="3" 
                                       placeholder="Write a comment..." required></textarea>
                         </div>
+                        <input type="hidden" name="lectureId" value="${lecture.id}" />
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <button type="submit" class="btn btn-primary">Post Comment</button>
                     </form>
@@ -123,6 +142,7 @@
                             <security:authorize access="hasRole('TEACHER')">
                                 <form action="<c:url value='/lecture/admin/comments/delete/${comment.id}' />" 
                                       method="post" style="display:inline;" class="mt-2">
+                                    <input type="hidden" name="lectureId" value="${lecture.id}" />
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                     <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>

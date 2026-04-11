@@ -10,7 +10,7 @@
 <c:if test="${param.logout != null}">
     <p>You have logged out.</p>
 </c:if>
-<h2>Customer Support Login</h2>
+<h2>Login</h2>
 <form action="login" method="POST">
     <label for="username">Username:</label><br/>
     <input type="text" id="username" name="username"/><br/><br/>
@@ -28,6 +28,5 @@
 
 
 
-<button onclick="history.back()">Back</button>
-</body>
+<button onclick="location.href='/indexpage';">Back to Home Page</button></body>
 </html>

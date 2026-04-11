@@ -20,7 +20,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PollVoteRepository pollVoteRepository;
 
-    // ====================== 原本的 Security 方法 ======================
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
@@ -33,16 +32,10 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    // ====================== 新增：安全的刪除方法 ======================
     @Transactional
     public void deleteUser(Long id) {
-        // 1. 先刪除該 user 的所有 comments
         commentRepository.deleteByAuthorId(id);
-
-        // 2. 再刪除該 user 的所有 poll votes
         pollVoteRepository.deleteByVoterId(id);
-
-        // 3. 最後刪除 user
         userRepository.deleteById(id);
     }
 }

@@ -38,7 +38,7 @@
         </a>
 
         <!-- Back to Home -->
-        <a href="<c:url value='/lecture/list' />" class="btn btn-secondary">
+        <a href="<c:url value='/indexpage' />" class="btn btn-secondary">
             ← Back to Course Home
         </a>
     </div>

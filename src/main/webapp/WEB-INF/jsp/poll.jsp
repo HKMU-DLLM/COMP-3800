@@ -15,7 +15,7 @@
 <div class="container py-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/lecture/list">All Lectures</a></li>
+            <li class="breadcrumb-item"><a href="/indexpage">All Lectures</a></li>
             <li class="breadcrumb-item active">${pollDatabase.question}</li>
         </ol>
     </nav>
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="card-footer bg-white py-3 text-end">
-                        <a href='<c:url value="/lecture/list" />' class="btn btn-link text-secondary">Cancel</a>
+                        <a href='<c:url value="/indexpage" />' class="btn btn-link text-secondary">Cancel</a>
                         <button type="submit" class="btn btn-primary px-5">
                             <c:choose>
                                 <c:when test="${not empty selectedOptionId}">Update My Vote</c:when>
@@ -143,9 +143,10 @@
                             <p class="mb-0 text-secondary">${comment.content}</p>
 
                             <security:authorize access="hasRole('TEACHER')">
-                                <form action="<c:url value='/lecture/admin/comments/delete/${comment.id}' />" 
+                                <form action="<c:url value='/poll/admin/comments/delete/${comment.id}' />"
                                       method="post" style="display:inline;" class="mt-2">
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                    <input type="hidden" name="pollId" value="${pollDatabase.id}" />
                                     <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
                                 </form>

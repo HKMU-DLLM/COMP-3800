@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,6 +98,36 @@ public class lectureService {
         return saved.getId();
     }
 
+    @Transactional
+    public void addAttachments(Lecture lecture, MultipartFile[] attachments) throws IOException {
+        Path uploadRoot = Paths.get("src/uploads");
+        if (!Files.exists(uploadRoot)) {
+            Files.createDirectories(uploadRoot);
+        }
+
+        if (attachments != null) {
+            for (MultipartFile filePart : attachments) {
+                if (filePart == null || filePart.isEmpty()) {
+                    continue;
+                }
+
+                String storedName = UUID.randomUUID() + "_" + filePart.getOriginalFilename();
+                Path target = uploadRoot.resolve(storedName);
+                Files.copy(filePart.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+
+                CourseMaterial m = new CourseMaterial();
+                m.setLecture(lecture);
+                m.setOriginalFileName(filePart.getOriginalFilename());
+                m.setContentType(filePart.getContentType());
+                m.setFileSize(filePart.getSize());
+                m.setStoredFilePath(target.toString());
+
+                lecture.getMaterials().add(m);
+            }
+        }
+        lecRepo.save(lecture);
+    }
+
     @Transactional(rollbackFor = LectureNotFound.class)
     public void delete(long id) throws LectureNotFound {
         Lecture deletedLecture = lecRepo.findById(id).orElse(null);
@@ -122,7 +153,6 @@ public class lectureService {
                 break;
             }
         }
-
 
 
         // Remove from lecture's collection

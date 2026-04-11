@@ -30,7 +30,7 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
         <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-        <a href="<c:url value='/lecture/list' />" class="btn btn-secondary btn-lg">Cancel</a>
+        <a href="<c:url value='/indexpage' />" class="btn btn-secondary btn-lg">Cancel</a>
     </form:form>
 </div>
 </body>

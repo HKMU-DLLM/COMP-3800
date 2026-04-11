@@ -7,16 +7,12 @@ import comp.comp3800.model.User;
 import comp.comp3800.model.VotingHistoryItem;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import comp.comp3800.dao.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
-import comp.comp3800.dao.CommentRepository;
-import comp.comp3800.dao.PollVoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.security.Principal;
 import comp.comp3800.dao.CommentService;
@@ -32,12 +28,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private CommentRepository commentRepo;
-
-    @Autowired
-    private PollVoteRepository pollVoteRepo;
 
     @Resource
     private UserRepository userRepo;
@@ -124,7 +114,6 @@ public class UserController {
         public void setRole(String role) { this.role = role; }
     }
 
-    // 1) View user info (no form)
     @GetMapping("/userinfo")
     public String showProfile(Model model, Principal principal) {
         if (principal == null) {
@@ -139,7 +128,6 @@ public class UserController {
         return "userinfo";  // /WEB-INF/jsp/userinfo.jsp
     }
 
-    // 1) Show edit form
     @GetMapping("/userinfo/edituser")
     public String showEditForm(Model model, Principal principal) {
         if (principal == null) {
@@ -304,7 +292,6 @@ public class UserController {
         return "comment-history";
     }
 
-    // 老師查看其他人的留言歷史
     @GetMapping("/admin/users/{userId}/comment-history")
     public String showUserCommentHistory(@PathVariable Long userId, Model model) {
         User targetUser = userRepo.findById(userId)

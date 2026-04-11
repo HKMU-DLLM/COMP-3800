@@ -10,7 +10,7 @@
     <h2 class="mb-4">User Management</h2>
     
     <a href="<c:url value='/admin/users/new' />" class="btn btn-success mb-3">+ Add New User</a>
-    <a href="<c:url value='/lecture/list' />" class="btn btn-secondary mb-3">← Back to Course Home</a>
+    <a href="<c:url value='/indexpage' />" class="btn btn-secondary mb-3">← Back to Course Home</a>
 
     <table class="table table-striped table-hover align-middle">
         <thead class="table-dark">

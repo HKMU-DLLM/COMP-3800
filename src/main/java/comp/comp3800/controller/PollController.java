@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -106,6 +107,15 @@ public class PollController {
         return "redirect:/poll/" + pollId;
     }
 
+    @PostMapping("/admin/comments/delete/{commentId}")
+    public String deleteComment(@PathVariable Long commentId,
+                                @RequestParam Long pollId,
+                                RedirectAttributes redirectAttributes) {
+        commentSer.deleteComment(commentId);
+        redirectAttributes.addAttribute("id", pollId);
+        return "redirect:/poll/" + pollId;
+    }
+
     // ====================== POLL MANAGEMENT (TEACHER ONLY) ======================
 
     @GetMapping("/admin/polls/new")
@@ -121,13 +131,13 @@ public class PollController {
             form.getOption4(), form.getOption5()
         );
         pollService.createPoll(form.getQuestion(), options);
-        return "redirect:/lecture/list";
+        return "redirect:/indexpage";
     }
 
     @PostMapping("/admin/polls/{pollId}/delete")
     public String deletePoll(@PathVariable Long pollId) {
-        pollService.deletePoll(pollId);   // ← 改回呼叫 deletePoll
-        return "redirect:/lecture/list?deleted=true";
+        pollService.deletePoll(pollId);
+        return "redirect:/indexpage?deleted=true";
     }
 
     // ====================== EDIT POLL ======================
@@ -141,7 +151,6 @@ public class PollController {
 
         List<PollOption> options = poll.getOptions();
 
-        // 使用傳統寫法，避免 lambda 編譯錯誤
         java.util.Collections.sort(options, new java.util.Comparator<PollOption>() {
             @Override
             public int compare(PollOption a, PollOption b) {
@@ -172,7 +181,7 @@ public class PollController {
         );
 
         pollService.updatePoll(pollId, form.getQuestion(), options);
-        return "redirect:/lecture/list";
+        return "redirect:/indexpage";
     }
 
     // ====================== FORM CLASSES ======================

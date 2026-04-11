@@ -5,15 +5,19 @@
     <title>Course</title>
 </head>
 <body>
+<security:authorize access="hasAnyRole('TEACHER','STUDENT')">
 <c:url var="logoutUrl" value="/logout"/>
 <form action="${logoutUrl}" method="post">
     <input type="submit" value="Log out" />
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
+</security:authorize>
 
+<security:authorize access="isAnonymous()">
 <a href="<c:url value="/login" />">
     <button type="button">Login</button>
 </a>
+</security:authorize>
 
 <security:authorize access="hasAnyRole('TEACHER','STUDENT')">
     <a href="<c:url value='/userinfo' />">

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
@@ -37,9 +38,6 @@ public class LectureController {
     private LectureRepository lectureRepo;
 
     @Autowired
-    private PollRepository pollRepo;
-
-    @Autowired
     private UserRepository userRepo;
 
     @Autowired
@@ -51,18 +49,6 @@ public class LectureController {
     @Autowired
     private CourseMaterialRepository courseMaterialRepo;
 
-    @GetMapping(value = {"", "/list"})
-    public String list(ModelMap model) {
-        List<Lecture> lectures = lectureRepo.findAll();
-        List<Poll> polls = pollRepo.findAll();
-        List<Comment> lectComments = commentSer.getCommentsForLect();
-
-        model.addAttribute("lectureDatabase", lectures);
-        model.addAttribute("pollDatabase", polls);
-        model.addAttribute("commentDatabase", lectComments);
-
-        return "list";
-    }
 
     @GetMapping("/coursematerial/{id}")
     public String viewMaterial(@PathVariable Long id, Model model) {
@@ -99,22 +85,7 @@ public class LectureController {
     public String create(@ModelAttribute("lectureForm") LectureController.Form form,
                          Principal principal) throws IOException {
         lecService.createLecture(form.getTitle(), form.getSummary(), form.getAttachments());
-        return "redirect:/lecture/list";
-    }
-
-    @PostMapping("/coursematerial/comment/add")
-    public String saveComment(@RequestParam String content, @RequestParam Long pollId, Principal principal) {
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setTargetId(pollId);
-        comment.setTargetType(Comment.TargetType.POLL);
-
-        User currentUser = userRepo.findByUsername(principal.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        comment.setAuthor(currentUser);
-
-        commentRepo.save(comment);
-        return "redirect:/coursematerial/{id}";
+        return "redirect:/indexpage";
     }
 
     @GetMapping("/{lectureId}/attachment/{materialId}")
@@ -132,27 +103,26 @@ public class LectureController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found on server");
             }
         }
-        return new RedirectView("/lecture/list", true);
+        return new RedirectView("/indexpage", true);
     }
 
-    @PostMapping("/coursematerial/comment")
-    public String addLectureComment(@RequestParam Long lectureId,
-                                    @RequestParam String content,
-                                    Principal principal) {
-        commentSer.addCommentToLecture(lectureId, content, principal);
+    @PostMapping("/coursematerial/{lectureId}/upload")
+    public String handleFileUpload(@PathVariable("lectureId") Long lectureId,
+                                   @RequestParam("attachments") MultipartFile[] attachments,
+                                   RedirectAttributes redirectAttributes) {
+        try {
+            Lecture lecture = lectureRepo.findById(lectureId)
+                    .orElseThrow(() -> new RuntimeException("Lecture not found"));
+
+            lecService.addAttachments(lecture, attachments);
+
+            redirectAttributes.addFlashAttribute("message", "Files uploaded successfully!");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to upload files: " + e.getMessage());
+        }
+
+        redirectAttributes.addAttribute("id", lectureId);
         return "redirect:/lecture/coursematerial/" + lectureId;
-    }
-
-    @PostMapping("/admin/comments/delete/{commentId}")
-    public String deleteComment(@PathVariable Long commentId) {
-        commentSer.deleteComment(commentId);
-        return "redirect:/lecture/list";
-    }
-
-    @GetMapping("/coursematerial/{id}/delete")
-    public String deleteLecture(@PathVariable("id") long id) throws LectureNotFound {
-        lecService.delete(id);
-        return "redirect:/lecture/list";
     }
 
     @GetMapping("/coursematerial/{lectureId}/attachment/{materialId}/delete")
@@ -163,4 +133,51 @@ public class LectureController {
         lecService.deleteAttachment(lectureId, materialId);
         return "redirect:/lecture/coursematerial/" + lectureId;
     }
+
+    @PostMapping("/coursematerial/comment")
+    public String addLectureComment(@RequestParam Long lectureId,
+                                    @RequestParam String content,
+                                    Principal principal,
+                                    RedirectAttributes redirectAttributes) {
+        commentSer.addCommentToLecture(lectureId, content, principal);
+        return "redirect:/coursematerial/{id}";
+    }
+
+    @PostMapping("/coursematerial/comment/add")
+    public String saveComment(@RequestParam String content,
+                              @RequestParam Long lectureId,
+                              Principal principal,
+                              RedirectAttributes redirectAttributes) {
+
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setTargetId(lectureId);
+        comment.setTargetType(Comment.TargetType.LECTURE);
+
+        User currentUser = userRepo.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        comment.setAuthor(currentUser);
+
+        commentRepo.save(comment);
+
+        redirectAttributes.addAttribute("id", lectureId);
+
+        return "redirect:/lecture/coursematerial/{id}";
+    }
+
+    @PostMapping("/admin/comments/delete/{commentId}")
+    public String deleteComment(@PathVariable Long commentId,
+                                @RequestParam Long lectureId,
+                                RedirectAttributes redirectAttributes) {
+        commentSer.deleteComment(commentId);
+        redirectAttributes.addAttribute("id", lectureId);
+        return "redirect:/lecture/coursematerial/{id}";
+    }
+
+    @GetMapping("/coursematerial/{id}/delete")
+    public String deleteLecture(@PathVariable("id") long id) throws LectureNotFound {
+        lecService.delete(id);
+        return "redirect:/indexpage";
+    }
+
 }
