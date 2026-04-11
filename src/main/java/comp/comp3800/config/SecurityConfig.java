@@ -23,7 +23,8 @@ public class SecurityConfig {
 
                         .requestMatchers("/lecture/create").hasRole("TEACHER")
 
-
+                        .requestMatchers("/admin/**").hasRole("TEACHER")
+                        .requestMatchers("/lecture/coursematerial/{id}/upload").hasRole("TEACHER")
                         .requestMatchers("/lecture/coursematerial/{id}/delete").hasRole("TEACHER")
                         .requestMatchers("/lecture/coursematerial/*/attachment/*/delete").hasRole("TEACHER")
 
