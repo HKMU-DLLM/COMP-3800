@@ -27,12 +27,10 @@
     </div>
 
     <div class="d-flex gap-3">
-        <!-- Edit Profile -->
         <a href="<c:url value='/userinfo/edituser' />" class="btn btn-warning">
             ✏️ Edit your information
         </a>
 
-        <!-- Voting History -->
         <a href="<c:url value='/me/voting-history' />" class="btn btn-info">
             📊 My Voting History
         </a>
@@ -41,7 +39,6 @@
             📊 My Comment History
         </a>
 
-        <!-- Back to Home -->
         <a href="<c:url value='/indexpage' />" class="btn btn-secondary">
             ← Back to Course Home
         </a>

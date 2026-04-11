@@ -64,7 +64,6 @@ public class lectureService {
         lecture.setTitle(title);
         lecture.setSummary(summary);
 
-        // Folder where you store files
         Path uploadRoot = Paths.get("src/uploads");
         Files.createDirectories(uploadRoot);
 
@@ -74,12 +73,10 @@ public class lectureService {
                     continue;
                 }
 
-                // 1) Save file to disk
                 String storedName = UUID.randomUUID() + "_" + filePart.getOriginalFilename();
                 Path target = uploadRoot.resolve(storedName);
                 Files.copy(filePart.getInputStream(), target);
 
-                // 2) Create CourseMaterial
                 CourseMaterial m = new CourseMaterial();
                 m.setLecture(lecture);
                 m.setOriginalFileName(filePart.getOriginalFilename());
@@ -87,8 +84,7 @@ public class lectureService {
                 m.setFileSize(filePart.getSize());
                 m.setStoredFilePath(target.toString());
 
-                // IMPORTANT: do NOT use setContents anymore for now
-                // m.setContents(null);
+
 
                 lecture.getMaterials().add(m);
             }
@@ -155,11 +151,8 @@ public class lectureService {
         }
 
 
-        // Remove from lecture's collection
         lecture.getMaterials().remove(toDelete);
-        // Optionally delete the material row itself
         cRepo.delete(toDelete);
-        // Persist lecture update
         lecRepo.save(lecture);
     }
 }

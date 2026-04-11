@@ -46,7 +46,6 @@ public class PollController {
     @Autowired
     private PollService pollService;
 
-    // ====================== 一般學生/老師看 Poll ======================
     @GetMapping("/{id}")
     public String viewPoll(@PathVariable Long id, Model model, Principal principal) {
         Poll poll = pollRepo.findById(id)
@@ -116,8 +115,6 @@ public class PollController {
         return "redirect:/poll/" + pollId;
     }
 
-    // ====================== POLL MANAGEMENT (TEACHER ONLY) ======================
-
     @GetMapping("/admin/polls/new")
     public String showCreatePollForm(Model model) {
         model.addAttribute("pollForm", new PollForm());
@@ -140,7 +137,6 @@ public class PollController {
         return "redirect:/indexpage?deleted=true";
     }
 
-    // ====================== EDIT POLL ======================
     @GetMapping("/admin/polls/{pollId}/edit")
     public String showEditPollForm(@PathVariable Long pollId, Model model) {
         Poll poll = pollRepo.findById(pollId)
@@ -184,7 +180,6 @@ public class PollController {
         return "redirect:/indexpage";
     }
 
-    // ====================== FORM CLASSES ======================
     public static class PollForm {
         private String question;
         private String option1;

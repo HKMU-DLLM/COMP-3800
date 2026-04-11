@@ -24,7 +24,7 @@ public class PollOption {
     private String optionText;
 
     @Column(name = "option_index", nullable = false)
-    private int optionIndex; // 1..5
+    private int optionIndex;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();

@@ -36,19 +36,15 @@
                     <td><span class="badge ${u.role == 'TEACHER' ? 'bg-warning' : 'bg-info'}">${u.role}</span></td>
                     <td>${u.enabled ? 'Yes' : 'No'}</td>
                     <td>
-                        <!-- Edit -->
                         <a href="<c:url value='/admin/users/${u.id}/edit' />" 
                            class="btn btn-warning btn-sm">Edit</a>
                         
-                        <!-- Voting History -->
                         <a href="<c:url value='/admin/users/${u.id}/voting-history' />" 
                            class="btn btn-info btn-sm">📊 Vote History</a>
-                        
-                        <!-- Comment History -->
+
                         <a href="<c:url value='/admin/users/${u.id}/comment-history' />" 
                            class="btn btn-primary btn-sm">💬 Comment History</a>
                         
-                        <!-- Delete -->
                         <form action="<c:url value='/admin/users/${u.id}/delete' />" method="post" style="display:inline;">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                             <button type="submit" class="btn btn-danger btn-sm"
