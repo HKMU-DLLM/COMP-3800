@@ -32,14 +32,13 @@ public class UserController {
     @Resource
     private UserRepository userRepo;
 
-    // ===== Signup backing object =====
     public static class SignupForm {
         private String username;
         private String password;
         private String fullName;
         private String email;
         private String phone;
-        private String role; // "STUDENT" or "TEACHER"
+        private String role;
 
         public String getUsername() { return username; }
         public void setUsername(String username) { this.username = username; }
@@ -70,7 +69,7 @@ public class UserController {
     public String handleSignup(@ModelAttribute("userForm") SignupForm form) {
         User user = new User();
         user.setUsername(form.getUsername());
-        user.setPassword(form.getPassword()); // encode in real app
+        user.setPassword(form.getPassword());
         user.setFullName(form.getFullName());
         user.setEmail(form.getEmail());
         user.setPhone(form.getPhone());
@@ -82,7 +81,7 @@ public class UserController {
     }
 
 
-    // ===== Profile form backing object =====
+
     public static class ProfileForm {
         private Long id;
         private String username;
@@ -90,7 +89,7 @@ public class UserController {
         private String fullName;
         private String email;
         private String phone;
-        private String role;   // "STUDENT" or "TEACHER"
+        private String role;
 
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
@@ -125,7 +124,7 @@ public class UserController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("user", user);
-        return "userinfo";  // /WEB-INF/jsp/userinfo.jsp
+        return "userinfo";
     }
 
     @GetMapping("/userinfo/edituser")
