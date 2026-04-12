@@ -1,11 +1,8 @@
 INSERT INTO users (username, password, full_name, email, phone, role, enabled) VALUES
 ('teacher1', '1234', 'Teacher One', 'teacher1@edu.com', '12345678', 'TEACHER', TRUE),
 ('student1', 'aaaa', 'Student One', 'student1@edu.hk', '12345678', 'STUDENT', TRUE),
-('student2', 'ssss', 'Student Two', 'student2@edu.hk', '12345678', 'STUDENT', TRUE),
-('profkim', '1234', 'Kim Jong Un', 'kimjongun@edu.hk', '12345678', 'TEACHER', TRUE),
-('profobama', '123456', 'Obama', 'obama@edu.hk', '87654321', 'TEACHER', TRUE),
-('pdiddy', 'aaaa', 'Puff Daddy', 'pdiddy@edu.hk', '23456789', 'STUDENT', TRUE),
-('jefferyepstein', 'ssss', 'Jeffery Epstein', 'epstein@edu.hk', '34567890', 'STUDENT', TRUE);
+('student2', 'ssss', 'Student Two', 'student2@edu.hk', '12345678', 'STUDENT', TRUE);
+
 
 INSERT INTO lectures (title, summary) VALUES
 ('Overview of Web Applications', 'Overview of this lecture'),
