@@ -34,10 +34,6 @@
                 <div class="card-body p-4 p-md-5">
 
                     <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Internal ID</label>
-                            <input type="text" class="form-control readonly-field" value="#${user.id}" readonly>
-                        </div>
                         <div class="col-md-8">
                             <label class="form-label text-uppercase">Username  (Permanent)</label>
                             <input type="text" class="form-control readonly-field" value="${user.username}" readonly>

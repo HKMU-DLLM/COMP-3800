@@ -33,7 +33,6 @@
 
                     <form action="<c:url value='/userinfo/edituser' />" method="post">
 
-                        <input type="hidden" name="id" value="${user.id}" />
                         <input type="hidden" name="username" value="${user.username}">
                         <input type="hidden" name="role" value="${user.role}" />
 

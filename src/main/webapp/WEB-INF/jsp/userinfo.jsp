@@ -69,8 +69,6 @@
                             <div class="info-label">Phone Number</div>
                             <div class="info-value"><c:out value="${user.phone}"/></div>
 
-                            <div class="info-label">User ID</div>
-                            <div class="info-value text-muted small">#<c:out value="${user.id}"/></div>
                         </div>
                     </div>
 

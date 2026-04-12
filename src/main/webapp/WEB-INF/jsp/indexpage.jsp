@@ -20,6 +20,25 @@
         .card { border: none; border-radius: 10px; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .card:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
         .btn-large-action { padding: 0.75rem 1.5rem; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; }
+
+        .stretched-link::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            content: "";
+        }
+
+        .card {
+            position: relative;
+            border: none;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -105,7 +124,7 @@
                                 </div>
                                 <div>
                                     <h5 class="mb-1">
-                                        <a href="<c:url value='/lecture/coursematerial/${lecture.id}' />" class="text-decoration-none text-dark fw-bold">
+                                        <a href="<c:url value='/lecture/coursematerial/${lecture.id}' />" class="text-decoration-none text-dark fw-bold stretched-link">
                                             <c:out value="${lecture.title}"/>
                                         </a>
                                     </h5>
@@ -137,7 +156,7 @@
                             <div class="card-body">
                                 <small class="text-primary fw-bold text-uppercase" style="font-size: 0.7rem;">Poll #${poll.id}</small>
                                 <h6 class="mt-1 mb-0">
-                                    <a href="<c:url value='/poll/${poll.id}' />" class="text-decoration-none text-dark">
+                                    <a href="<c:url value='/poll/${poll.id}' />" class="text-decoration-none text-dark stretched-link">
                                         <c:out value="${poll.question}"/>
                                     </a>
                                 </h6>
