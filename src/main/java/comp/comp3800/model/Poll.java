@@ -47,4 +47,12 @@ public class Poll {
 
     public List<PollVote> getVotes() { return votes; }
     public void setVotes(List<PollVote> votes) { this.votes = votes; }
+
+    public String getPrettyTime() {
+        if (this.createdAt == null) return "";
+        java.time.format.DateTimeFormatter formatter =
+                java.time.format.DateTimeFormatter.ofPattern("dd / MM / yyyy HH:mm")
+                        .withZone(java.time.ZoneId.systemDefault());
+        return formatter.format(this.createdAt);
+    }
 }

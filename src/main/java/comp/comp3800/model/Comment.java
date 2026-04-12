@@ -90,7 +90,7 @@ public class Comment {
     public String getPrettyTime() {
         if (this.createdAt == null) return "";
         java.time.format.DateTimeFormatter formatter =
-                java.time.format.DateTimeFormatter.ofPattern("dd MM yyyy HH:mm")
+                java.time.format.DateTimeFormatter.ofPattern("dd / MM / yyyy HH:mm")
                         .withZone(java.time.ZoneId.systemDefault());
         return formatter.format(this.createdAt);
     }

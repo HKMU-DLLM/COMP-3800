@@ -34,6 +34,9 @@ public class SecurityConfig {
                         .requestMatchers("/poll/**").hasAnyRole("TEACHER","STUDENT")
                         .requestMatchers("/lecture/coursematerial/**").hasAnyRole("TEACHER","STUDENT")
 
+                        .requestMatchers("/userinfo/**").hasAnyRole("TEACHER","STUDENT")
+
+
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
